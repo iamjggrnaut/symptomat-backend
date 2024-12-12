@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "../../dist/libs/apple-auth-mobile"
+  },
+  "include": ["src/**/*"],
+  "typeRoots": [
+    "./src/types"
+  ],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+}

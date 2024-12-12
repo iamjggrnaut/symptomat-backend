@@ -1,0 +1,57 @@
+{
+  "COI_ID_DEVELOP": "fhmpaoof1ijbu1rcg7ca",
+  "COI_ID_STAGING": "fhm83el6gk2aeeldbjka",
+  "ENV_DEVELOP": "paste .env.develop file",
+  "ENV_STAGING": "paste .env.staging file",
+  "IMAGE_DEVELOP": "cr.yandex/crpptr5tpmhi4n5fl40s/surveys-backend-develop",
+  "IMAGE_STAGING": "cr.yandex/crpptr5tpmhi4n5fl40s/surveys-backend-staging",
+  "ORMCONFIG_DEVELOP": {
+    "type": "postgres",
+    "host": "rc1a-p3u1eqbwq9mgq4me.mdb.yandexcloud.net",
+    "port": 6432,
+    "username": "purrweb",
+    "password": "",
+    "database": "develop",
+    "entities": ["src/**/*.entity.ts"],
+    "migrations": ["migration/*.ts"],
+    "seeds": ["seeds/**/*.seed.ts"],
+    "factories": ["factories/**/*.factory.ts"],
+    "cli": {
+      "migrationsDir": "migration"
+    },
+    "ssl": {
+      "rejectUnauthorized": false,
+      "ca": "./yandex/root.crt"
+    }
+  },
+  "ORMCONFIG_STAGING": {
+    "type": "postgres",
+    "host": "rc1a-p3u1eqbwq9mgq4me.mdb.yandexcloud.net",
+    "port": 6432,
+    "username": "purrweb",
+    "password": "",
+    "database": "develop",
+    "entities": ["src/**/*.entity.ts"],
+    "migrations": ["migration/*.ts"],
+    "seeds": ["seeds/**/*.seed.ts"],
+    "factories": ["factories/**/*.factory.ts"],
+    "cli": {
+      "migrationsDir": "migration"
+    },
+    "ssl": {
+      "rejectUnauthorized": false,
+      "ca": "./yandex/root.crt"
+    }
+  },
+  "SLACK_WEBHOOK_URL": "https://hooks.slack.com/services/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",
+  "YC_CLOUD_ID": "b1gp1t68d0kq9qssm067",
+  "YC_FOLDER_ID": "b1gsr3l52501rdtkitfe",
+  "YC_DEPLOY_KEY": {
+    "id": "aje223h7iad5uj0b7hdm",
+    "service_account_id": "ajet58si75v78d3niijf",
+    "created_at": "2021-07-28T11:47:00Z",
+    "key_algorithm": "RSA_2048",
+    "public_key": "-----BEGIN PUBLIC KEY-----\n\n-----END PUBLIC KEY-----\n",
+    "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n"
+  }
+}

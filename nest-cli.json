@@ -1,0 +1,95 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@nestjs/graphql",
+        "options": {
+          "introspectComments": true
+        }
+      },
+      {
+        "name": "@nestjs/swagger/plugin",
+        "options": {
+          "dtoFileNameSuffix": [".dto.ts", ".entity.ts"]
+        }
+      }
+    ],
+    "assets": ["i18n/**/*"]
+  },
+  "projects": {
+    "cloud-files-storage": {
+      "type": "library",
+      "root": "libs/cloud-files-storage",
+      "entryFile": "index",
+      "sourceRoot": "libs/cloud-files-storage/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/cloud-files-storage/tsconfig.lib.json"
+      }
+    },
+    "cloud-cache-storage": {
+      "type": "library",
+      "root": "libs/cloud-cache-storage",
+      "entryFile": "index",
+      "sourceRoot": "libs/cloud-cache-storage/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/cloud-cache-storage/tsconfig.lib.json"
+      }
+    },
+    "apple-auth-mobile": {
+      "type": "library",
+      "root": "libs/apple-auth-mobile",
+      "entryFile": "index",
+      "sourceRoot": "libs/apple-auth-mobile/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/apple-auth-mobile/tsconfig.lib.json"
+      }
+    },
+    "fb-auth-mobile": {
+      "type": "library",
+      "root": "libs/fb-auth-mobile",
+      "entryFile": "index",
+      "sourceRoot": "libs/fb-auth-mobile/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/fb-auth-mobile/tsconfig.lib.json"
+      }
+    },
+    "google-auth-mobile": {
+      "type": "library",
+      "root": "libs/google-auth-mobile",
+      "entryFile": "index",
+      "sourceRoot": "libs/google-auth-mobile/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/google-auth-mobile/tsconfig.lib.json"
+      }
+    },
+    "google-maps": {
+      "type": "library",
+      "root": "libs/google-maps",
+      "entryFile": "index",
+      "sourceRoot": "libs/google-maps/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/google-maps/tsconfig.lib.json"
+      }
+    },
+    "firebase": {
+      "type": "library",
+      "root": "libs/firebase",
+      "entryFile": "index",
+      "sourceRoot": "libs/firebase/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/firebase/tsconfig.lib.json"
+      }
+    },
+    "mailer": {
+      "type": "library",
+      "root": "libs/mailer",
+      "entryFile": "index",
+      "sourceRoot": "libs/mailer/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/mailer/tsconfig.lib.json"
+      }
+    }
+  }
+}

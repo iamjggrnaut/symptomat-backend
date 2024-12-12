@@ -1,0 +1,77 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": false,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths": {
+      "src/*": [
+        "src/*"
+      ],
+      "@purrweb/cloud-files-storage": [
+        "libs/cloud-files-storage/src"
+      ],
+      "@purrweb/cloud-files-storage/*": [
+        "libs/cloud-files-storage/src/*"
+      ],
+      "@purrweb/cloud-cache-storage": [
+        "libs/cloud-cache-storage/src"
+      ],
+      "@purrweb/cloud-cache-storage/*": [
+        "libs/cloud-cache-storage/src/*"
+      ],
+      "@purrweb/apple-auth-mobile": [
+        "libs/apple-auth-mobile/src"
+      ],
+      "@purrweb/apple-auth-mobile/*": [
+        "libs/apple-auth-mobile/src/*"
+      ],
+      "@purrweb/fb-auth-mobile": [
+        "libs/fb-auth-mobile/src"
+      ],
+      "@purrweb/fb-auth-mobile/*": [
+        "libs/fb-auth-mobile/src/*"
+      ],
+      "@purrweb/google-auth-mobile": [
+        "libs/google-auth-mobile/src"
+      ],
+      "@purrweb/google-auth-mobile/*": [
+        "libs/google-auth-mobile/src/*"
+      ],
+      "@purrweb/google-maps": [
+        "libs/google-maps/src"
+      ],
+      "@purrweb/google-maps/*": [
+        "libs/google-maps/src/*"
+      ],
+      "@purrweb/firebase": [
+        "libs/firebase/src"
+      ],
+      "@purrweb/firebase/*": [
+        "libs/firebase/src/*"
+      ],
+      "@purrweb/mailer": [
+        "libs/mailer/src"
+      ],
+      "@purrweb/mailer/*": [
+        "libs/mailer/src/*"
+      ]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

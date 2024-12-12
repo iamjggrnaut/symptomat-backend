@@ -1,0 +1,6 @@
+{
+  "patient-upload-analyzes": {
+    "title": "New analyzes uploaded",
+    "description": "Patient #{patientMedicalCardNumber} has uploaded new analyzes"
+  }
+}

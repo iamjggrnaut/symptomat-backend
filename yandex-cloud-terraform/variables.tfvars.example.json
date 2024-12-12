@@ -1,0 +1,22 @@
+{
+  "YANDEX_ACCESS_KEY_ID": "",
+  "YANDEX_SECRET_ACCESS_KEY": "",
+  "YANDEX_CLOUD_ID": "b1gp1t68d0kq9qssm067",
+  "YANDEX_OAUTH_TOKEN": "",
+  "YANDEX_FOLDER_ID": "b1gsr3l52501rdtkitfe",
+  "NETWORK_ID": "enprllgih947963fmina",
+  "SUBNET_ID": "e9boaeb6jalk52nm1g6u",
+  "AVAILABILITY_ZONE": "ru-central1-a",
+  "PRIVATE_BUCKET": "surveys-staging-private",
+  "PUBLIC_BUCKET": "surveys-staging-public",
+  "DEVELOP_ADMIN_PANEL_BUCKET": "develop-admin-surveys.purrweb.com",
+  "DEVELOP_DOCTOR_BUCKET": "develop-doctor-surveys.purrweb.com",
+  "DEVELOP_MANAGER_BUCKET": "develop-manager-surveys.purrweb.com",
+  "STAGING_ADMIN_PANEL_BUCKET": "staging-admin-surveys.purrweb.com",
+  "STAGING_DOCTOR_BUCKET": "staging-doctor-surveys.purrweb.com",
+  "STAGING_MANAGER_BUCKET": "staging-manager-surveys.purrweb.com",
+  "STAGING_POSTGRESQL_CLUSTER_DATABASE_NAME": "staging",
+  "STAGING_POSTGRESQL_CLUSTER_DATABASE_USER": "purrweb",
+  "STAGING_POSTGRESQL_CLUSTER_DATABASE_PASSWORD": "",
+  "STAGING_REDIS_CLUSTER_DATABASE_PASSWORD": ""
+}

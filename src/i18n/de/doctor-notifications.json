@@ -1,0 +1,6 @@
+{
+  "patient-upload-analyzes": {
+    "title": "Neue Tests geladen",
+    "description": "Patient #{patientMedicalCardNumber} hat neue Tests hochgeladen"
+  }
+}

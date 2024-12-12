@@ -1,0 +1,4 @@
+{
+  "pattern": "^(master|develop|staging){1}$|((hotfix|release)-\\d+\\.\\d+\\.\\d+){1}$|^(feature|fix)/(BQDG-\\d+)+$",
+  "errorMsg": "Invalid branch name"
+}

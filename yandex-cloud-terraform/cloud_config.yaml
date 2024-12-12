@@ -1,0 +1,7 @@
+ssh_pwauth: no
+users:
+  - name: purrweb
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXgRGjCqqUxs/i+t8BXWU9w6hSB2scie+sXtRWCEaOkihQbqeDESaoydWpcmsbVTBLHgAfwxwRWQWBnvSbCoEwLdlIqN0/TCk7VHN5yZnmxYjmF0d92OO6qYepvs2UVjklHagStQ31PJNf7XhNdxhvCaulTZgDnKHhCkA44qvQpmGaIXIqltHxww1ZZxIVLXX7Qrol0wx1JQe0PAyyMZyP/BTdxkdkRv1goqs+cSF9PH3Y3Gpo2Soduw6BdtQmh27kKwYSUVauxufCNhp1BwI1FLQ1cOQwfOoZFB6eZY6s5eVB0Fn8733crLNdsdDnQ7Y87AuKwJbxAwhzlBtEuAND god@konstantin-m1.local"

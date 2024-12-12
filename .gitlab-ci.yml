@@ -1,0 +1,79 @@
+stages:
+  - lint
+  - build
+  - deploy
+
+services:
+  - name: docker:dind
+    entrypoint: ['env', '-u', 'DOCKER_HOST']
+    command: ['dockerd-entrypoint.sh']
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  # See https://github.com/docker-library/docker/pull/166
+  DOCKER_TLS_CERTDIR: ''
+
+eslint:
+  stage: lint
+  image: node:14-alpine
+  script:
+    - yarn install
+    - yarn lint:ci
+
+build:
+  stage: build
+  image: docker:stable
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "staging"'
+      variables:
+        ENV_FILE: $ENV_STAGING
+        ORMCONFIG_FILE: $ORMCONFIG_STAGING
+        ORMCONFIG_FILE_NAME: 'ormconfig.staging.json'
+        DOCKER_FILE_NAME: 'Dockerfile.ci.staging'
+        IMAGE: '$IMAGE_STAGING:$CI_COMMIT_SHORT_SHA-$CI_PIPELINE_IID'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      variables:
+        ENV_FILE: $ENV_PRODUCTION
+        ORMCONFIG_FILE: $ORMCONFIG_PRODUCTION
+        ORMCONFIG_FILE_NAME: 'ormconfig.production.json'
+        DOCKER_FILE_NAME: 'Dockerfile.ci.staging'
+        IMAGE: '$IMAGE_PRODUCTION:$CI_COMMIT_SHORT_SHA-$CI_PIPELINE_IID'
+  script:
+    - cat $YC_DEPLOY_KEY | docker login --username json_key --password-stdin cr.yandex
+    - echo $ENV_FILE > .env.temp
+    # replace spaces on newlines for .env
+    - cat .env.temp | xargs -n 1 > .env
+    - echo $ORMCONFIG_FILE > $ORMCONFIG_FILE_NAME
+    - docker build -f $DOCKER_FILE_NAME -t backend:latest .
+    - docker tag backend:latest $IMAGE
+    - docker push $IMAGE
+
+deploy:
+  stage: deploy
+  image: ubuntu:20.04
+  dependencies:
+    - build
+  variables:
+    YC: '/root/yandex-cloud/bin/yc'
+    SLACK_USER_EMOJI: ':mechanic::skin-tone-3:'
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "staging"'
+      variables:
+        COI_ID: $COI_ID_STAGING
+        IMAGE: '$IMAGE_STAGING:$CI_COMMIT_SHORT_SHA-$CI_PIPELINE_IID'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      variables:
+        COI_ID: $COI_ID_PRODUCTION
+        IMAGE: '$IMAGE_PRODUCTION:$CI_COMMIT_SHORT_SHA-$CI_PIPELINE_IID'
+
+  script:
+    - apt-get update
+    - apt-get install -y curl
+    - curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+    - $YC config profile create gitlab-profile
+    - $YC config set service-account-key $YC_DEPLOY_KEY
+    - $YC config set cloud-id $YC_CLOUD_ID
+    - $YC config set folder-id $YC_FOLDER_ID
+    - $YC compute instance update-container $COI_ID --container-image=$IMAGE
+    - bash -ex scripts/ci-complete-slack-notify.sh "$SLACK_WEBHOOK_URL" $CI_COMMIT_BRANCH $CI_COMMIT_BRANCH "$CI_COMMIT_MESSAGE" "$IMAGE" "$SLACK_USER_EMOJI"

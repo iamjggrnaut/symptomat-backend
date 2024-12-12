@@ -1,0 +1,1264 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type BaseProblem {
+  message: String!
+}
+
+input CreateAnalyzesInput {
+  doctorId: UUID!
+  files: [PatientCreateAnalyzesInput!]!
+}
+
+input CreateCustomQuestionInput {
+  options: [String!]
+  scaleIndicators: ScaleQuestionIndicatorsInput
+  title: String!
+  type: QuestionType!
+}
+
+type CreateCustomQuestionPayload {
+  problem: EmailSignUpSendCodeProblemUnion
+  question: QuestionModel
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type DoctorConnection {
+  nodes: [DoctorInvitationModel!]!
+  pageInfo: PageInfo!
+}
+
+input DoctorCreateSurveyTemplateInput {
+  drugsIds: [UUID!]!
+  endAt: DateTime!
+  patientId: UUID!
+  period: SurveyTemplatePeriod!
+  questions: [QuestionInput!]!
+  startAt: DateTime!
+  timezoneOffset: Int = 0
+  title: String!
+}
+
+type DoctorCreateSurveyTemplatePayload {
+  problem: BaseProblem
+  surveyTemplate: SurveyTemplateModel
+}
+
+input DoctorEmailPasswordRecoveryInput {
+  hash: String!
+  password: String!
+}
+
+type DoctorEmailPasswordRecoveryPayload {
+  problem: NotExistDoctorProblem
+  success: Boolean
+}
+
+input DoctorEmailPasswordRecoverySendLinkInput {
+  email: String!
+}
+
+type DoctorEmailPasswordRecoverySendLinkPayload {
+  hash: String
+  problem: EmailSignUpSendCodeProblemUnion
+}
+
+input DoctorEmailSignInInput {
+  email: String!
+  password: String!
+}
+
+type DoctorEmailSignInPayload {
+  problem: NotExistEmailProblem
+  refreshToken: String
+  token: String
+  user: DoctorModel
+}
+
+input DoctorEmailSignUpInput {
+  hash: String!
+  password: String!
+}
+
+type DoctorEmailSignUpPayload {
+  problem: InvalidVerificationEmailHashProblem
+  refreshToken: String
+  token: String
+  user: DoctorModel
+}
+
+type DoctorEmailSignUpSendCodePayload {
+  hash: String
+  problem: EmailSignUpSendCodeProblemUnion
+}
+
+input DoctorEmailSignUpSendLinkInput {
+  email: String!
+}
+
+type DoctorInvitationModel {
+  createdAt: DateTime
+  deletedAt: DateTime
+  doctorId: String
+  email: String
+  hospital: HospitalModel
+  id: String!
+  isInviteAccepted: Boolean
+  language: Language
+  notificationsSettings: DoctorNotificationSettingsModel
+  role: PatientRole
+  updatedAt: DateTime
+}
+
+type DoctorModel {
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  hospital: HospitalModel
+  id: String!
+  language: Language
+  notificationsSettings: DoctorNotificationSettingsModel
+  role: PatientRole
+  updatedAt: DateTime
+}
+
+type DoctorNotificationConnection {
+  nodes: [DoctorNotificationModel!]!
+  pageInfo: PageInfo!
+}
+
+enum DoctorNotificationKind {
+  CONTACT_ME_REQUEST
+  CRITICAL_INDICATORS
+  UPLOAD_ANALYZES_BY_PATIENT
+}
+
+type DoctorNotificationModel {
+  createdAt: DateTime!
+  description: String!
+  doctorId: UUID!
+  extraData: DoctorNotificationsExtraData
+  hospitalPatient: HospitalPatientModel
+  id: UUID!
+  isRead: Boolean!
+  kind: DoctorNotificationKind!
+  patientId: UUID!
+  title: String!
+}
+
+type DoctorNotificationSettingsModel {
+  contactMeRequest: Boolean
+  criticalIndicators: Boolean
+  uploadAnalyzesByPatients: Boolean
+}
+
+type DoctorNotificationsExtraData {
+  surveyTemplateId: String!
+}
+
+input DoctorPasswordUpdateInput {
+  newPassword: String!
+  password: String!
+}
+
+type DoctorPasswordUpdatePayload {
+  problem: PasswordsNotMatchProblem
+  refreshToken: String
+  token: String
+}
+
+type DoctorPatientModel {
+  doctorId: UUID!
+  id: UUID!
+  patientId: UUID!
+}
+
+type DoctorPatientSurveyAnswerConnection {
+  nodes: [SurveyAnswerModel!]!
+  pageInfo: PageInfo!
+}
+
+type DoctorPatientSurveyAnswerModel {
+  answerQuestionOptionText: String
+  answerQuestionOptionsTexts: [String!]
+  answerValue: SurveyAnswerValue
+  isCritical: Boolean!
+  isQuestionCustom: Boolean!
+  maxAnswer: String
+  minAnswer: String
+  questionId: UUID!
+  questionTitle: String!
+  questionType: QuestionType!
+}
+
+input DoctorRemoveByIdInput {
+  doctorId: String!
+}
+
+type DoctorRemoveByIdPayload {
+  problem: NotExistDoctorProblem
+  success: Boolean
+}
+
+input DoctorUpdateLanguageInput {
+  language: Language = RU
+}
+
+type DoctorUpdateLanguagePayload {
+  user: DoctorModel
+}
+
+input DoctorUpdateNotificationsInput {
+  contactMeRequestNotifications: Boolean!
+  criticalIndicatorsNotifications: Boolean!
+  uploadAnalyzesByPatientsNotifications: Boolean!
+}
+
+type DoctorUpdateNotificationsPayload {
+  user: DoctorModel
+}
+
+type DrugModel {
+  id: String!
+  name: String!
+}
+
+union EmailSignUpSendCodeProblemUnion = ExistEmailProblem | TooManyRequestsProblem
+
+type ExistEmailProblem {
+  message: String!
+}
+
+"""A string or number represents float"""
+scalar FloatString
+
+input HospitalManagerEmailSignInInput {
+  email: String!
+  password: String!
+}
+
+type HospitalManagerEmailSignInPayload {
+  problem: NotExistEmailProblem
+  refreshToken: String
+  token: String
+  user: MeHospitalManagerModel
+}
+
+type HospitalModel {
+  id: String!
+  name: String!
+  patientsLimit: Int!
+}
+
+type HospitalPatientModel {
+  createdAt: DateTime!
+  doctorId: String
+  firstName: String
+  hasActiveSurvey: Boolean!
+  hospitalId: UUID!
+  id: UUID!
+  lastName: String
+  medicalCardNumber: String!
+  patientId: UUID!
+}
+
+type HospitalsPatientsConnection {
+  nodes: [HospitalPatientModel!]!
+  pageInfo: PageInfo!
+}
+
+type InvalidVerificationEmailHashProblem {
+  message: String!
+}
+
+type InvalidVerificationEmailPasswordProblem {
+  message: String!
+}
+
+enum Language {
+  DE
+  EN
+  KZ
+  RU
+}
+
+type MeHospitalManagerModel {
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  id: String!
+  role: PatientRole
+  updatedAt: DateTime
+}
+
+type MePatientModel {
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  fcmToken: String
+  hospitals: [HospitalPatientModel!]!
+  id: String!
+  isFirstSignUp: Boolean!
+  notificationsSettings: PatientNotificationsSettingsModel!
+  role: PatientRole
+  updatedAt: DateTime
+}
+
+type Mutation {
+  """create patient analyzes"""
+  createPatientAnalyze(
+    """input"""
+    input: CreateAnalyzesInput!
+  ): [PatientAnalyzeModel!]!
+
+  """create signed url"""
+  createSignedUrl(
+    """filename"""
+    filename: String!
+  ): PatientCreateSignedUrlPayload!
+
+  """Cancel active doctor patient survey"""
+  doctorCancelActivePatientSurvey(patientId: UUID!): Boolean!
+
+  """Create custom question"""
+  doctorCreateCustomQuestion(input: CreateCustomQuestionInput!): CreateCustomQuestionPayload!
+
+  """Create private survey template"""
+  doctorCreatePrivateSurveyTemplate(input: DoctorCreateSurveyTemplateInput!): DoctorCreateSurveyTemplatePayload!
+
+  """Create public survey template"""
+  doctorCreatePublicSurveyTemplate(input: DoctorCreateSurveyTemplateInput!): DoctorCreateSurveyTemplatePayload!
+
+  """Send link to change password and retrieve hash"""
+  doctorEmailRecoveryPasswordSendLink(input: DoctorEmailPasswordRecoverySendLinkInput!): DoctorEmailPasswordRecoverySendLinkPayload!
+
+  """Sign-in with email retrive user with bearer token"""
+  doctorEmailSignIn(input: DoctorEmailSignInInput!): DoctorEmailSignInPayload!
+
+  """Sign-up doctor with email and retrieve user with bearer token"""
+  doctorEmailSignUp(input: DoctorEmailSignUpInput!): DoctorEmailSignUpPayload!
+
+  """Send code to email for sign-in with email"""
+  doctorEmailSignUpSendCode(input: DoctorEmailSignUpSendLinkInput!): DoctorEmailSignUpSendCodePayload!
+
+  """Mark all patient analyzes as viewed"""
+  doctorMarkPatientAnalyzesAsViewed(patientId: String!): Boolean!
+
+  """Remove doctor notification by id"""
+  doctorNotificationRemove(id: String!): Boolean!
+
+  """Update password"""
+  doctorPasswordUpdate(input: DoctorPasswordUpdateInput!): DoctorPasswordUpdatePayload!
+
+  """Read all doctor notifications"""
+  doctorReadAllNotifications: Boolean!
+
+  """Change password and retrieve doctor"""
+  doctorRecoverPassword(input: DoctorEmailPasswordRecoveryInput!): DoctorEmailPasswordRecoveryPayload!
+
+  """Remove doctor by id"""
+  doctorRemoveById(input: DoctorRemoveByIdInput!): DoctorRemoveByIdPayload!
+
+  """Remove survey template by id"""
+  doctorRemoveSurveyTemplate(id: UUID!): Boolean!
+
+  """Change language"""
+  doctorUpdateLanguage(input: DoctorUpdateLanguageInput!): DoctorUpdateLanguagePayload!
+
+  """Update notification settings"""
+  doctorUpdateNotificationsSettings(input: DoctorUpdateNotificationsInput!): DoctorUpdateNotificationsPayload!
+
+  """Sign-in with email retrive user with bearer token"""
+  hospitalManagerEmailSignIn(input: HospitalManagerEmailSignInInput!): HospitalManagerEmailSignInPayload!
+
+  """Assign patient to doctor"""
+  patientAssignToDoctor(input: PatientAssignToDoctorInput!): PatientAssignToDoctorPayload!
+
+  """Check recovery code"""
+  patientCheckRecoveryCode(input: PatientCheckRecoveryCodeInput!): PatientCheckRecoveryCodePayload!
+
+  """Complete survey as patient"""
+  patientCompleteSurvey(input: PatientCompleteSurveyInput!): PatientCompleteSurveyPayload!
+
+  """Create patient and send temp password to email"""
+  patientCreate(input: PatientCreateInput!): PatientCreatePayload!
+
+  """Create password for patient retrive patient with bearer token"""
+  patientCreatePassword(input: PatientCreatePasswordInput!): PatientCreatePasswordPayload!
+
+  """Send code to change password and retrieve code"""
+  patientEmailRecoveryPasswordSendCode(input: PatientEmailPasswordRecoverySendCodeInput!): PatientEmailPasswordRecoverySendCodePayload!
+
+  """Sign-in with email retrive user with bearer token"""
+  patientEmailSignIn(input: PatientEmailSignInInput!): PatientEmailSignInPayload!
+
+  """Update my email"""
+  patientEmailUpdate(input: PatientEmailSignInInput!): PatientEmailUpdatePayload!
+
+  """Send code for update email"""
+  patientEmailUpdateSendCode(input: PatientEmailUpdateSendCodeInput!): PatientEmailUpdateSendPasswordPayload!
+
+  """Update patient firebase token"""
+  patientFcmTokenUpdate(input: PatientFcmTokenUpdateInput!): PatientFcmTokenUpdatePayload!
+
+  """Remove patient notification by id"""
+  patientNotificationRemove(id: String!): Boolean!
+
+  """Update password"""
+  patientPasswordUpdate(input: PatientPasswordUpdateInput!): PatientPasswordUpdatePayload!
+
+  """Read all patient notifications"""
+  patientReadAllNotifications: Boolean!
+
+  """Change password and retrieve patient"""
+  patientRecoverPassword(input: PatientEmailPasswordRecoveryInput!): PatientEmailPasswordRecoveryPayload!
+
+  """Remove patient by id"""
+  patientRemove(id: String!): PatientRemovePayload!
+
+  """Send contact me request to doctor"""
+  patientSendContactMeRequest(doctorId: String!, message: String!): PatientSendContactMeRequestPayload!
+
+  """Change language"""
+  patientUpdateLanguage(input: PatientUpdateLanguageInput!): PatientUpdateLanguagePayload!
+
+  """Update notification settings"""
+  patientUpdateNotificationsSettings(input: PatientUpdateNotificationsInput!): PatientUpdateNotificationsPayload!
+}
+
+type NotExistDoctorProblem {
+  message: String!
+}
+
+type NotExistEmailProblem {
+  message: String!
+}
+
+type NotExistPatientProblem {
+  message: String!
+}
+
+type NumericQuestionIndicators {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+input NumericQuestionIndicatorsInput {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+type PasswordsNotMatchProblem {
+  message: String!
+}
+
+type PatientAnalyzeConnection {
+  nodes: [PatientAnalyzeModel!]!
+  pageInfo: PageInfo!
+}
+
+type PatientAnalyzeModel {
+  createdAt: DateTime!
+  doctorId: String!
+  fileKey: String!
+  filename: String!
+  id: String!
+  isViewed: Boolean!
+  patientId: String!
+}
+
+input PatientAssignToDoctorInput {
+  patientId: String!
+}
+
+type PatientAssignToDoctorPayload {
+  problem: NotExistPatientProblem
+  success: Boolean
+}
+
+input PatientCheckRecoveryCodeInput {
+  code: String!
+  email: String!
+}
+
+type PatientCheckRecoveryCodePayload {
+  problem: NotExistPatientProblem
+  success: Boolean
+}
+
+input PatientCompleteSurveyAnswerInput {
+  """Pass if question type is radio"""
+  answerQuestionOptionId: UUID
+
+  """Pass if question type is checkbox"""
+  answerQuestionOptionsIds: [UUID!]
+
+  """Pass if question type is not checkbox or radio"""
+  answerValue: SurveyAnswerValueInput
+  questionId: UUID!
+  questionType: QuestionType!
+}
+
+input PatientCompleteSurveyInput {
+  answers: [PatientCompleteSurveyAnswerInput!]
+  surveyId: UUID!
+}
+
+type PatientCompleteSurveyPayload {
+  problem: BaseProblem
+  success: Boolean
+}
+
+input PatientCreateAnalyzesInput {
+  fileKey: String!
+  fileName: String!
+}
+
+input PatientCreateInput {
+  email: String!
+  firstname: String
+  lastname: String
+  medicalCardNumber: String!
+}
+
+input PatientCreatePasswordInput {
+  password: String!
+}
+
+type PatientCreatePasswordPayload {
+  problem: InvalidVerificationEmailPasswordProblem
+  refreshToken: String
+  token: String
+  user: MePatientModel
+}
+
+type PatientCreatePayload {
+  password: String
+  problem: EmailSignUpSendCodeProblemUnion
+}
+
+type PatientCreateSignedUrlPayload {
+  fileKey: String!
+  signedUrl: String!
+}
+
+type PatientDashboardModel {
+  pressure: PatientDashboardPressureFieldModel
+  pulse: Float
+  temperature: Float
+  weight: Float
+}
+
+type PatientDashboardPressureFieldModel {
+  lowerValue: Float!
+  upperValue: Float!
+}
+
+input PatientEmailPasswordRecoveryInput {
+  code: String!
+  email: String!
+  password: String!
+}
+
+type PatientEmailPasswordRecoveryPayload {
+  problem: NotExistPatientProblem
+  success: Boolean
+}
+
+input PatientEmailPasswordRecoverySendCodeInput {
+  email: String!
+}
+
+type PatientEmailPasswordRecoverySendCodePayload {
+  code: String
+  problem: EmailSignUpSendCodeProblemUnion
+}
+
+input PatientEmailSignInInput {
+  email: String!
+  password: String!
+}
+
+type PatientEmailSignInPayload {
+  problem: NotExistEmailProblem
+  refreshToken: String
+  token: String
+  user: MePatientModel
+}
+
+type PatientEmailUpdatePayload {
+  problem: InvalidVerificationEmailPasswordProblem
+  refreshToken: String
+  token: String
+  user: MePatientModel
+}
+
+input PatientEmailUpdateSendCodeInput {
+  email: String!
+}
+
+union PatientEmailUpdateSendCodeProblemUnion = ExistEmailProblem | TooManyRequestsProblem
+
+type PatientEmailUpdateSendPasswordPayload {
+  """send when DEVELOPMENT environment"""
+  password: String
+  problem: PatientEmailUpdateSendCodeProblemUnion
+}
+
+input PatientFcmTokenUpdateInput {
+  fcmToken: String!
+}
+
+type PatientFcmTokenUpdatePayload {
+  problem: BaseProblem
+  user: MePatientModel
+}
+
+type PatientModel {
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  id: String!
+  notificationsSettings: PatientNotificationsSettingsModel!
+  role: PatientRole
+  updatedAt: DateTime
+}
+
+type PatientNotificationConnection {
+  nodes: [PatientNotificationModel!]!
+  pageInfo: PageInfo!
+}
+
+enum PatientNotificationKind {
+  NEW_SURVEY
+}
+
+type PatientNotificationModel {
+  createdAt: DateTime!
+  description: String!
+  extraData: PatientNotificationsExtraData!
+  id: UUID!
+  isRead: Boolean!
+  kind: PatientNotificationKind!
+  patientId: UUID!
+  title: String!
+}
+
+type PatientNotificationsExtraData {
+  surveyId: String!
+}
+
+type PatientNotificationsSettingsModel {
+  newSurvey: Boolean
+}
+
+input PatientPasswordUpdateInput {
+  oldPassword: String!
+  password: String!
+}
+
+type PatientPasswordUpdatePayload {
+  problem: PasswordsNotMatchProblem
+  refreshToken: String
+  token: String
+  user: MePatientModel
+}
+
+type PatientPressureHistoryConnection {
+  nodes: [PatientPressureHistoryItemModel!]!
+  pageInfo: PageInfo!
+}
+
+type PatientPressureHistoryItemModel {
+  createdAt: DateTime!
+  lowerValue: Float!
+  upperValue: Float!
+}
+
+type PatientPulseHistoryConnection {
+  nodes: [PatientPulseHistoryItemModel!]!
+  pageInfo: PageInfo!
+}
+
+type PatientPulseHistoryItemModel {
+  createdAt: DateTime!
+  value: Float!
+}
+
+type PatientRemovePayload {
+  problem: NotExistPatientProblem
+  success: Boolean
+}
+
+enum PatientRole {
+  ADMIN
+  DOCTOR
+  MANAGER
+  PATIENT
+}
+
+type PatientSendContactMeRequestPayload {
+  problem: NotExistPatientProblem
+  success: Boolean
+}
+
+type PatientTemperatureHistoryConnection {
+  nodes: [PatientTemperatureHistoryItemModel!]!
+  pageInfo: PageInfo!
+}
+
+type PatientTemperatureHistoryItemModel {
+  createdAt: DateTime!
+  value: Float!
+}
+
+input PatientUpdateLanguageInput {
+  language: Language = RU
+}
+
+type PatientUpdateLanguagePayload {
+  user: PatientModel
+}
+
+input PatientUpdateNotificationsInput {
+  newSurveyNotifications: Boolean!
+}
+
+type PatientUpdateNotificationsPayload {
+  user: PatientModel
+}
+
+type PatientWeightHistoryConnection {
+  nodes: [PatientWeightHistoryItemModel!]!
+  pageInfo: PageInfo!
+}
+
+type PatientWeightHistoryItemModel {
+  createdAt: DateTime!
+  value: Float!
+}
+
+type PressureQuestionIndicators {
+  lowerMaxValue: FloatString!
+  lowerMinValue: FloatString!
+  upperMaxValue: FloatString!
+  upperMinValue: FloatString!
+}
+
+input PressureQuestionIndicatorsInput {
+  lowerMaxValue: FloatString!
+  lowerMinValue: FloatString!
+  upperMaxValue: FloatString!
+  upperMinValue: FloatString!
+}
+
+type Query {
+  """Check doctor email for uniqueness"""
+  doctorEmailIsUniq(email: String!): Boolean!
+
+  """Retrieve hospital patient for current doctor"""
+  doctorFindHospitalPatient(patientId: UUID!): HospitalPatientModel!
+
+  """Retrieve private survey templates for patient"""
+  doctorFindPatientPrivateSurveyTemplates(patientId: UUID!): [SurveyTemplateModel!]!
+
+  """Retrieve public survey templates for patient"""
+  doctorFindPatientPublicSurveyTemplates(patientId: UUID!): [SurveyTemplateModel!]!
+
+  """Retrieve doctor patient question answers"""
+  doctorFindPatientQuestionAnswers(
+    """cursor"""
+    after: String
+    endAt: DateTime
+    patientId: UUID!
+    questionId: UUID!
+    startAt: DateTime
+    surveyTemplateId: String
+
+    """less than or equal 20"""
+    take: Int = 4
+  ): DoctorPatientSurveyAnswerConnection!
+
+  """Retrieve doctor patient survey answers"""
+  doctorFindPatientSurveyAnswers(patientId: UUID!, surveyTemplateId: UUID): [DoctorPatientSurveyAnswerModel!]!
+
+  """Find question by id"""
+  doctorFindQuestionById(id: String!): QuestionModel!
+
+  """Retrieve new patient analyzes count"""
+  doctorGetNewPatientAnalyzesCount(patientId: String!): Int!
+
+  """Retrieve doctor notifications"""
+  doctorGetNotifications(
+    """cursor"""
+    after: String
+
+    """less than or equal 20"""
+    first: Int = 4
+  ): DoctorNotificationConnection!
+
+  """Retrieve unread doctor notifications count"""
+  doctorGetUnreadNotificationsCount: Int!
+
+  """Retrieve current doctor"""
+  doctorMe: DoctorModel!
+
+  """Find questions by title and category id"""
+  doctorSearch(categoryId: String, title: String!): [QuestionModel!]!
+
+  """Find drug questions"""
+  drugFindQuestions(id: UUID!): [QuestionModel!]!
+
+  """Search drugs"""
+  drugsSearch(filter: String): [DrugModel!]!
+
+  """Return all categories"""
+  findAllQuestionCategories: [QuestionCategoryModel!]!
+  getSignedUrl(
+    """fileKey"""
+    fileKey: String!
+  ): String!
+
+  """
+  Check hospital limit before creating a patient. If result is true, doctor can add patient, if false - limit is exhausted
+  """
+  hospitalLimitNotExhausted: Boolean!
+
+  """Retrieve patient dashboard"""
+  patientDashboard: PatientDashboardModel!
+
+  """Retrieve patient doctors"""
+  patientDoctors: [DoctorPatientModel!]!
+
+  """Check patient email for uniqueness"""
+  patientEmailIsUniq(email: String!): Boolean!
+
+  """Retrieve active patient survey"""
+  patientFindActiveSurvey: SurveyModel
+
+  """Retrieve patient notifications"""
+  patientGetNotifications(
+    """cursor"""
+    after: String
+
+    """less than or equal 20"""
+    first: Int = 4
+  ): PatientNotificationConnection!
+
+  """Retrieve patient pressure history"""
+  patientGetPressureHistory(
+    """cursor"""
+    after: String
+
+    """filter to"""
+    endAt: DateTime
+
+    """less than or equal 20"""
+    first: Int = 4
+
+    """filter from"""
+    startAt: DateTime
+  ): PatientPressureHistoryConnection!
+
+  """Retrieve patient pulse history"""
+  patientGetPulseHistory(
+    """cursor"""
+    after: String
+
+    """filter to"""
+    endAt: DateTime
+
+    """less than or equal 20"""
+    first: Int = 4
+
+    """filter from"""
+    startAt: DateTime
+  ): PatientPulseHistoryConnection!
+
+  """Retrieve patient temperature history"""
+  patientGetTemperatureHistory(
+    """cursor"""
+    after: String
+
+    """filter to"""
+    endAt: DateTime
+
+    """less than or equal 20"""
+    first: Int = 4
+
+    """filter from"""
+    startAt: DateTime
+  ): PatientTemperatureHistoryConnection!
+
+  """Retrieve patient notifications"""
+  patientGetUnreadNotificationsCount: Int!
+
+  """Retrieve patient weight history"""
+  patientGetWeightHistory(
+    """cursor"""
+    after: String
+
+    """filter to"""
+    endAt: DateTime
+
+    """less than or equal 20"""
+    first: Int = 4
+
+    """filter from"""
+    startAt: DateTime
+  ): PatientWeightHistoryConnection!
+
+  """Retrieve current patient"""
+  patientMe: MePatientModel!
+
+  """Check patient medical card number for uniqueness"""
+  patientMedicalCardNumberIsUniq(hospitalId: UUID!, medicalCardNumber: String!): Boolean!
+
+  """Search doctors"""
+  searchDoctors(
+    """cursor"""
+    after: String
+
+    """filter"""
+    filter: String
+
+    """less than or equal 20"""
+    first: Int = 4
+    orderBy: SearchOrder = ASC
+  ): DoctorConnection!
+
+  """Search patient"""
+  searchPatient(
+    """cursor"""
+    after: String
+
+    """filter"""
+    filter: String!
+
+    """less than or equal 20"""
+    first: Int = 4
+  ): HospitalsPatientsConnection!
+
+  """Search patient analyze"""
+  searchPatientAnalyzes(
+    """cursor"""
+    after: String
+
+    """endAt"""
+    endAt: DateTime
+
+    """less than or equal 20"""
+    first: Int = 4
+    orderBy: SearchOrder = DESC
+
+    """patientId"""
+    patientId: String!
+
+    """startAt"""
+    startAt: DateTime
+  ): PatientAnalyzeConnection!
+
+  """Retrieve one survey template"""
+  surveyTemplateFindOne(id: UUID!): SurveyTemplateModel!
+}
+
+type QuestionCategoryModel {
+  id: String!
+  name: String!
+}
+
+type QuestionIndicators {
+  numeric: NumericQuestionIndicators
+  pressure: PressureQuestionIndicators
+  scale: ScaleQuestionIndicators
+  temperature: TemperatureQuestionIndicators
+}
+
+input QuestionIndicatorsInput {
+  numeric: NumericQuestionIndicatorsInput
+  pressure: PressureQuestionIndicatorsInput
+  scale: ScaleQuestionIndicatorsInput
+  temperature: TemperatureQuestionIndicatorsInput
+}
+
+input QuestionInput {
+  """Pass if question type is radio"""
+  criticalAnswerId: UUID
+
+  """Pass if question type is checkbox"""
+  criticalAnswersIds: [UUID!]
+
+  """Pass if question type is not radio or checkbox"""
+  criticalIndicators: SurveyTemplateQuestionCriticalIndicatorsInput
+  questionId: UUID!
+  questionType: QuestionType!
+}
+
+type QuestionModel {
+  id: String!
+  indicators: QuestionIndicators
+  isActual: Boolean!
+  isCustom: Boolean!
+  options: [QuestionOptionModel!]
+  title: String!
+  type: QuestionType!
+}
+
+type QuestionOptionModel {
+  id: String!
+  index: Int!
+  text: String!
+}
+
+enum QuestionType {
+  CHECKBOX
+  NUMERIC
+  PRESSURE
+  PULSE
+  RADIO
+  SCALE
+  TEMPERATURE
+  WEIGHT
+}
+
+type ScaleQuestionIndicators {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+input ScaleQuestionIndicatorsInput {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+enum SearchOrder {
+  ASC
+  DESC
+}
+
+type SurveyAnswerModel {
+  answerQuestionOption: QuestionOptionModel
+  answerQuestionOptionId: UUID
+  answerQuestionOptions: [QuestionOptionModel!]
+  answerQuestionOptionsIds: [UUID!]
+  answerValue: SurveyAnswerValue
+  createdAt: DateTime!
+  id: String!
+  isCritical: Boolean!
+  questionId: UUID!
+  surveyId: UUID!
+}
+
+type SurveyAnswerValue {
+  numeric: SurveyNumericAnswerValue
+  pressure: SurveyPressureAnswerValue
+  pulse: SurveyPulseAnswerValue
+  scale: SurveyScaleAnswerValue
+  temperature: SurveyTemperatureAnswerValue
+  weight: SurveyWeightAnswerValue
+}
+
+input SurveyAnswerValueInput {
+  numeric: SurveyNumericAnswerValueInput
+  pressure: SurveyPressureAnswerValueInput
+  pulse: SurveyPulseAnswerValueInput
+  scale: SurveyScaleAnswerValueInput
+  temperature: SurveyTemperatureAnswerValueInput
+  weight: SurveyWeightAnswerValueInput
+}
+
+type SurveyModel {
+  createdAt: DateTime!
+  id: String!
+  template: SurveyTemplateModel!
+}
+
+type SurveyNumericAnswerValue {
+  value: Float!
+}
+
+input SurveyNumericAnswerValueInput {
+  value: Float!
+}
+
+type SurveyPressureAnswerValue {
+  lowerValue: Float!
+  upperValue: Float!
+}
+
+input SurveyPressureAnswerValueInput {
+  lowerValue: Float!
+  upperValue: Float!
+}
+
+type SurveyPulseAnswerValue {
+  value: Float!
+}
+
+input SurveyPulseAnswerValueInput {
+  value: Float!
+}
+
+type SurveyScaleAnswerValue {
+  value: Float!
+}
+
+input SurveyScaleAnswerValueInput {
+  value: Float!
+}
+
+type SurveyTemperatureAnswerValue {
+  value: Float!
+}
+
+input SurveyTemperatureAnswerValueInput {
+  value: Float!
+}
+
+enum SurveyTemplateKind {
+  PRIVATE
+  PUBLIC
+}
+
+type SurveyTemplateModel {
+  createdAt: DateTime!
+  drugs: [DrugModel!]!
+  endAt: DateTime!
+  id: String!
+  kind: SurveyTemplateKind!
+  period: SurveyTemplatePeriod!
+  questions: [SurveyTemplateQuestionModel!]!
+  questionsCount: Int!
+  startAt: DateTime!
+  timezoneOffset: Int!
+  title: String!
+}
+
+type SurveyTemplateNumericQuestionCriticalIndicators {
+  maxValue: FloatString
+  minValue: FloatString
+}
+
+input SurveyTemplateNumericQuestionCriticalIndicatorsInput {
+  maxValue: FloatString
+  minValue: FloatString
+}
+
+enum SurveyTemplatePeriod {
+  EVERYDAY
+  EVERY_TWO_DAYS
+  ONCE_A_WEEK
+  ONCE_IN_TWO_WEEKS
+}
+
+type SurveyTemplatePressureQuestionCriticalIndicators {
+  maxLowerValue: FloatString!
+  maxUpperValue: FloatString!
+  minLowerValue: FloatString!
+  minUpperValue: FloatString!
+}
+
+input SurveyTemplatePressureQuestionCriticalIndicatorsInput {
+  maxLowerValue: FloatString!
+  maxUpperValue: FloatString!
+  minLowerValue: FloatString!
+  minUpperValue: FloatString!
+}
+
+type SurveyTemplatePulseQuestionCriticalIndicators {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+input SurveyTemplatePulseQuestionCriticalIndicatorsInput {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+type SurveyTemplateQuestionCriticalIndicators {
+  numeric: SurveyTemplateNumericQuestionCriticalIndicators
+  pressure: SurveyTemplatePressureQuestionCriticalIndicators
+  pulse: SurveyTemplatePulseQuestionCriticalIndicators
+  scale: SurveyTemplateScaleQuestionCriticalIndicators
+  temperature: SurveyTemplateTemperatureQuestionCriticalIndicators
+  weight: SurveyTemplateWeightQuestionCriticalIndicators
+}
+
+input SurveyTemplateQuestionCriticalIndicatorsInput {
+  numeric: SurveyTemplateNumericQuestionCriticalIndicatorsInput
+  pressure: SurveyTemplatePressureQuestionCriticalIndicatorsInput
+  pulse: SurveyTemplatePulseQuestionCriticalIndicatorsInput
+  scale: SurveyTemplateScaleQuestionCriticalIndicatorsInput
+  temperature: SurveyTemplateTemperatureQuestionCriticalIndicatorsInput
+  weight: SurveyTemplateWeightQuestionCriticalIndicatorsInput
+}
+
+type SurveyTemplateQuestionModel {
+  criticalAnswerId: UUID
+  criticalAnswersIds: [UUID!]
+  criticalIndicators: SurveyTemplateQuestionCriticalIndicators
+  question: QuestionModel
+}
+
+type SurveyTemplateScaleQuestionCriticalIndicators {
+  value: FloatString!
+}
+
+input SurveyTemplateScaleQuestionCriticalIndicatorsInput {
+  value: FloatString!
+}
+
+type SurveyTemplateTemperatureQuestionCriticalIndicators {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+input SurveyTemplateTemperatureQuestionCriticalIndicatorsInput {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+type SurveyTemplateWeightQuestionCriticalIndicators {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+input SurveyTemplateWeightQuestionCriticalIndicatorsInput {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+type SurveyWeightAnswerValue {
+  value: Float!
+}
+
+input SurveyWeightAnswerValueInput {
+  value: Float!
+}
+
+type TemperatureQuestionIndicators {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+input TemperatureQuestionIndicatorsInput {
+  maxValue: FloatString!
+  minValue: FloatString!
+}
+
+type TooManyRequestsProblem {
+  message: String!
+}
+
+"""A string represents string UUID v4"""
+scalar UUID

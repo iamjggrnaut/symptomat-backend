@@ -1,0 +1,6 @@
+{
+  "patient-upload-analyzes": {
+    "title": "Жаңа сынақтар жүктелді",
+    "description": "#{patientMedicalCardNumber} пациент жаңа сынақтарды жүктеп салды"
+  }
+}

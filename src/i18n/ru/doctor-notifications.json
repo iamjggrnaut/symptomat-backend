@@ -1,0 +1,6 @@
+{
+  "patient-upload-analyzes": {
+    "title": "Загружены новые анализы",
+    "description": "Пациент #{patientMedicalCardNumber} загрузил новые анализы"
+  }
+}
