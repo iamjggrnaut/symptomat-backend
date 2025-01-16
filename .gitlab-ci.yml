@@ -1,5 +1,4 @@
 stages:
-  - lint
   - build
   - deploy
 
@@ -13,13 +12,6 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ''
   DEPLOY_PATH: "/home/resymon-apps/backend-api/"
-
-eslint:
-  stage: lint
-  image: node:6.9.4
-  script:
-    - yarn install
-    - yarn lint:ci
 
 docker-build:
   image: docker:latest
