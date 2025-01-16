@@ -16,7 +16,7 @@ variables:
 
 eslint:
   stage: lint
-  image: node:14-buster
+  image: node:6.9.4
   script:
     - yarn install
     - yarn lint:ci
