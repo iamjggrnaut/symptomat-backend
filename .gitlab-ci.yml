@@ -17,6 +17,8 @@ variables:
 eslint:
   stage: lint
   image: node:14
+  before_script:
+    - npm install -g yarn
   script:
     - yarn install
     - yarn lint:ci
