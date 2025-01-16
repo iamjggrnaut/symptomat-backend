@@ -16,9 +16,7 @@ variables:
 
 eslint:
   stage: lint
-  image: node:14-alpine
-  before_script:
-    - apk add --no-cache yarn
+  image: node:14
   script:
     - yarn install
     - yarn lint:ci
