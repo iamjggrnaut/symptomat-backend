@@ -32,18 +32,14 @@ deploy:
   before_script:
     - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > /tmp/id_rsa
-    - chmod 600 /tmp/id_rsa
-    - cat /tmp/id_rsa
-    - ssh-add /tmp/id_rsa
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - ssh-add -l
-    - ssh $SSH_USER@$SSH_HOST "mkdir -p $DEPLOY_PATH && chown -R $SSH_USER:$SSH_USER $DEPLOY_PATH"
+    - ssh $SSH_USER@$SSH_HOST "sudo mkdir -p $DEPLOY_PATH && sudo chown -R $SSH_USER:$SSH_USER $DEPLOY_PATH"
   script:
-    - rsync -av --delete ./ $SSH_USER@$SSH_HOST:$DEPLOY_PATH
+    - rsync -av --update ./ $SSH_USER@$SSH_HOST:$DEPLOY_PATH
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       variables:
