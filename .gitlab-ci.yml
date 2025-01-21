@@ -12,6 +12,7 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ''
   DEPLOY_PATH: "/home/resymon-apps/backend-api/"
+  INFRA_PATH: "/home/resymon-apps/infrastructure/"
 
 docker-build:
   image: docker:latest
@@ -40,6 +41,7 @@ deploy:
     - ssh $SSH_USER@$SSH_HOST "sudo mkdir -p $DEPLOY_PATH && sudo chown -R $SSH_USER:$SSH_USER $DEPLOY_PATH"
   script:
     - rsync -av --update ./ $SSH_USER@$SSH_HOST:$DEPLOY_PATH
+    - ssh $SSH_USER@$SSH_HOST "cd $INFRA_PATH && sudo docker compose down && sudo docker compose up --build"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       variables:
