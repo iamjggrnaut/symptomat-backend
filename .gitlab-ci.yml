@@ -2,7 +2,15 @@ stages:
   - build
   - deploy
 
+services:
+  - name: docker:dind
+    entrypoint: ['env', '-u', 'DOCKER_HOST']
+    command: ['dockerd-entrypoint.sh']
+
 variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ''
   DEPLOY_PATH: "/home/resymon-apps/backend-api/"
   INFRA_PATH: "/home/resymon-apps/infrastructure/"
 
@@ -44,3 +52,4 @@ deploy:
     - if: $CI_COMMIT_BRANCH == 'ft'
       variables:
         SSH_HOST: $SSH_HOST_FT
+
