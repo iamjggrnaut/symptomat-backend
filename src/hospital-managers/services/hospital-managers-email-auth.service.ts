@@ -64,7 +64,7 @@ export class HospitalManagerEmailAuthService
         applicationName,
         supportEmail: this.configService.get<string>('mailgun.supportEmail'),
         password,
-        signInLink: this.configService.get<string>('links.frontendManagerSignInLink'),
+        signInLink: `https://manager.resymon.ru`,
       });
       await this.emailNotificationService.sendWithTemplate({
         email,
