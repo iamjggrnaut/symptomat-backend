@@ -102,7 +102,7 @@ export const configuration = () => ({
     frontendSignUpLink: process.env.FRONTEND_SIGN_UP_LINK,
     frontendResetPasswordLink: process.env.FRONTEND_RESET_PASSWORD_LINK,
     frontendSignInLink: process.env.FRONTEND_SIGN_IN_LINK,
-    frontendManagerSignInLink: process.env.FRONTEND_MANAGER_SIGN_IN_LINK,
+    frontendManagerSignInLink: 'https://manager.resymon.ru',
     frontendUrl: process.env.FRONTEND_URL,
     appStoreLink: process.env.APP_STORE_LINK,
     googlePlayLink: process.env.GOOGLE_PLAY_LINK,
