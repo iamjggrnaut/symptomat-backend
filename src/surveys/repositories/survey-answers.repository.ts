@@ -273,6 +273,6 @@ export class SurveyAnswersRepository extends Repository<SurveyAnswer> {
       });
     }
 
-    return surveyAnswersIdsQb.orderBy('survey_answers."createdAt"', 'DESC').limit(take);
+    return surveyAnswersIdsQb.orderBy('survey_answers."createdAt"', 'ASC').limit(take);
   }
 }
