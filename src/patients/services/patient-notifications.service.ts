@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { ConfigService } from '@nestjs/config';
 import { DoctorCreatedSurveysEvent } from 'src/common/events';
 import { DOCTOR_CREATED_SURVEYS_EVENT } from 'src/common/events/events.types';
 import { EmailNotificationsService } from 'src/notifications/services';
@@ -22,6 +23,7 @@ export class PatientNotificationsService {
   constructor(
     private readonly surveysRepository: SurveysRepository,
     private readonly patientNotificationsRepository: PatientNotificationsRepository,
+    readonly configService: ConfigService,
     private readonly emailNotificationService: EmailNotificationsService,
     private readonly patientPushNotificationsService: PatientPushNotificationsService,
   ) {}
@@ -85,7 +87,7 @@ export class PatientNotificationsService {
       where: {
         id: In(surveyIds),
       },
-      relations: ['template', 'patient'],
+      relations: ['template', 'patient', 'hospital_patient'],
     });
     const patientNotifications = surveys.map((survey) => {
       return {
@@ -101,9 +103,21 @@ export class PatientNotificationsService {
 
     surveys.forEach((survey) => {
       if (survey.patient.notificationsSettings.newSurvey) {
+        const firstName = survey.hospital_patient.firstName
+        const lastName = survey.hospital_patient.lastName
+        const applicationName = this.configService.get<string>('applicationName');
+        const googlePlayLink = this.configService.get<string>('links.googlePlayLink')
+        const appStoreLink = this.configService.get<string>('links.appStoreLink')
         const email = survey.patient.email;
         this.patientPushNotificationsService.sendNewSurvey(survey);
-        this.emailNotificationService.send(email, `Вам пришел новый опрос "${survey.template.title}"`, 'Новый опрос');
+        this.emailNotificationService.notifyPatientNewQuery(
+          email,
+          firstName,
+          lastName, 
+          googlePlayLink,
+          appStoreLink,
+          applicationName
+        );
       }
     });
   }

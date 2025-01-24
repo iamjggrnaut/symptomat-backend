@@ -20,7 +20,7 @@ export class SurveyAnswersRepository extends Repository<SurveyAnswer> {
       orderDirection: 'ASC' | 'DESC';
     },
   ) {
-    const { alias = 'survey_answers', surveyAlias = 'survey', questionAlias = 'question', orderDirection = 'DESC' } =
+    const { alias = 'survey_answers', surveyAlias = 'survey', questionAlias = 'question', orderDirection = 'ASC' } =
       options || {};
 
     const qb = this.createQueryBuilder(alias)
@@ -56,7 +56,7 @@ export class SurveyAnswersRepository extends Repository<SurveyAnswer> {
       orderDirection: 'ASC' | 'DESC';
     };
   }) {
-    const { alias = 'survey_answers', surveyAlias = 'survey', questionAlias = 'question', orderDirection = 'DESC' } =
+    const { alias = 'survey_answers', surveyAlias = 'survey', questionAlias = 'question', orderDirection = 'ASC' } =
       options || {};
 
     const qb = this.createQueryBuilder(alias)
@@ -67,7 +67,7 @@ export class SurveyAnswersRepository extends Repository<SurveyAnswer> {
       .setParameters({ patientId, questionType });
 
     if (last) {
-      qb.andWhere(`survey_answers."createdAt" ${orderDirection == 'DESC' ? '<' : '>'} :lastCreatedAt`, {
+      qb.andWhere(`survey_answers."createdAt" ${orderDirection == 'ASC' ? '<' : '>'} :lastCreatedAt`, {
         lastCreatedAt: last.createdAt,
       });
     }
@@ -99,7 +99,7 @@ export class SurveyAnswersRepository extends Repository<SurveyAnswer> {
         doctorId,
         patientId,
       })
-      .orderBy(/*sql*/ `question.id, survey_answers."createdAt"`, 'DESC');
+      .orderBy(/*sql*/ `question.id, survey_answers."createdAt"`, 'ASC');
 
     if (surveyTemplateId) {
       qb.andWhere(`survey."templateId" = :templateId`, { templateId: surveyTemplateId });

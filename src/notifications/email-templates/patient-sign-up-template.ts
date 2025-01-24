@@ -1,10 +1,14 @@
 export const makePatientSignUpTemplate = ({
+  firstname,
+  lastname,
   applicationName,
   appStoreLink,
   googlePlayLink,
   password,
   supportEmail,
 }: {
+  firstname: string,
+  lastname: string,
   applicationName: string;
   appStoreLink: string;
   googlePlayLink: string;
@@ -16,31 +20,43 @@ export const makePatientSignUpTemplate = ({
     <head>
       <meta name="viewport" content="width=device-width" />
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      <title>Благодарим за регистрацию в ${applicationName}</title>
+      <title>Добро пожаловать в ${applicationName}!</title>
     </head>
     <body>
-      Уважаемый пациент, 
+      Здравствуйте, ${firstname} ${lastname}!
       <br>
-      Вы успешно зарегистрированы в ${applicationName}.
-      <br>
-      <br>
-      Мы искренне надеемся, что Ваше сотрудничество с врачом с помощью приложения ${applicationName} поможет Вам в лечении.
+      Спасибо, что присоединились к ${applicationName}! Мы рады помочь вам в управлении терапией и повышении качества жизни.
       <br>
       <br>
-      Для начала работы, пожалуйста, загрузите на Ваше устройство приложение ${applicationName}, перейдя по ссылке:
-      <br>
-      AppStore: ${appStoreLink}
-      <br>
-      GooglePlay: ${googlePlayLink}
+      Пожалуйста, заполните свой профиль, указав необходимую информацию о состоянии здоровья.
       <br>
       <br>
-      Временный пароль для первого входа в приложение: ${password}
+      Не стесняйтесь обращаться к нашей службе поддержки, если у вас возникнут вопросы: <a href="mailto:${supportEmail}">${supportEmail}</a>.
       <br>
       <br>
-      При возникновении вопросов, пожалуйста, напишите в службу технической поддержки на ${supportEmail}
+      Мы верим, что ${applicationName} поможет вам чувствовать себя увереннее и держать лечение под контролем.
       <br>
       <br>
-      Пожалуйста, не отвечайте на это письмо. Оно было создано автоматически.
+      Временный пароль: ${password}
+      <br>
+      <br>
+      Android:
+      <br>
+      <ul>
+      <li>
+      GooglePlay: <a href="${googlePlayLink}"> Resymon - Apps on Google Play</a>
+      </li>
+      <li>
+      RuStore: <a href="https://www.rustore.ru/catalog/app/medico.app">Resymon в каталоге RuStore @RuStore</a>
+      </li>
+      </ul>
+      <br>
+      AppStore: <a href="${appStoreLink}">Resymon @App Store</a>
+      <br>
+      <br>
+      С уважением,
+      <br>
+      Команда ${applicationName}
     </body>
     </html>
       `;

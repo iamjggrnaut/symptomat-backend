@@ -59,7 +59,7 @@ export class DoctorEmailNotificationService {
     await this.emailNotificationService.sendWithTemplate({
       email,
       template,
-      subject: `Благодарим за регистрацию в ${applicationName}`,
+      subject: `Добро пожаловать в ${applicationName}, коллега!`,
     });
 
     return this.setEmailRecord({ hash, email, hospitalId });

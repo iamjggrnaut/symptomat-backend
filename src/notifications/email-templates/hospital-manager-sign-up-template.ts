@@ -14,26 +14,25 @@ export const makeHospitalManagerSignUpTemplate = ({
     <head>
       <meta name="viewport" content="width=device-width" />
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      <title>Благодарим за регистрацию в ${applicationName}</title>
+      <title>Добро пожаловать в ${applicationName} для менеджеров клиник!</title>
     </head>
     <body>
-      Уважаемый администратор, 
+      Уважаемый(ая) администратор!
       <br>
-      благодарим Вас за регистрацию в системе ${applicationName}.
+      Благодарим вас за регистрацию в Resymon! Наша платформа разработана чтобы облегчить коммуникацию с пациентами и повысить эффективность работы вашей клиники.
       <br>
       <br>
-      Для входа в Личный кабинет перейдите по ссылке и используйте приведенный ниже пароль.
+       Если у вас возникнут вопросы, обратитесь в нашу службу технической поддержки, где Вас обязательно помогут: <a href="mailto:${supportEmail}">${supportEmail}</a>.
       <br>
       <br>
       Ссылка: ${signInLink}
       <br>
-      Пароль: ${password}
+      Временный пароль: ${password}
       <br>
       <br>
-      При возникновении вопросов, пожалуйста, напишите в службу технической поддержки на ${supportEmail}
+      С уважением,
       <br>
-      <br>
-      Пожалуйста, не отвечайте на это письмо. Оно было создано автоматически.
+      Команда ${applicationName}
     </body>
     </html>
       `;

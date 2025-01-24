@@ -69,7 +69,7 @@ export class HospitalManagerEmailAuthService
       await this.emailNotificationService.sendWithTemplate({
         email,
         template,
-        subject: `Благодарим за регистрацию в ${applicationName}`,
+        subject: `Добро пожаловать в ${applicationName} для менеджеров клиник!`,
       });
       await this.repository.save(manager);
       return {
