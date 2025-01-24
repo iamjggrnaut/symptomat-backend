@@ -25,6 +25,7 @@ export const makePatientSignUpTemplate = ({
     <body>
       Здравствуйте, ${firstname} ${lastname}!
       <br>
+      <br>
       Спасибо, что присоединились к ${applicationName}! Мы рады помочь вам в управлении терапией и повышении качества жизни.
       <br>
       <br>
