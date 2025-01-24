@@ -5,6 +5,7 @@ import { DoctorCreatedSurveysEvent } from 'src/common/events';
 import { DOCTOR_CREATED_SURVEYS_EVENT } from 'src/common/events/events.types';
 import { EmailNotificationsService } from 'src/notifications/services';
 import { SurveysRepository } from 'src/surveys/repositories';
+import { HospitalsPatientsRepository } from 'src/hospitals/repositories/';
 import { cursorToData, dataToCursor } from 'src/utils/base64';
 import { In } from 'typeorm';
 
@@ -24,6 +25,7 @@ export class PatientNotificationsService {
     private readonly surveysRepository: SurveysRepository,
     private readonly patientNotificationsRepository: PatientNotificationsRepository,
     readonly configService: ConfigService,
+    readonly hospitalPatientRepository: HospitalsPatientsRepository,
     private readonly emailNotificationService: EmailNotificationsService,
     private readonly patientPushNotificationsService: PatientPushNotificationsService,
   ) {}
@@ -87,7 +89,7 @@ export class PatientNotificationsService {
       where: {
         id: In(surveyIds),
       },
-      relations: ['template', 'patient', 'hospital_patient'],
+      relations: ['template', 'patient'],
     });
     const patientNotifications = surveys.map((survey) => {
       return {
@@ -102,9 +104,12 @@ export class PatientNotificationsService {
     this.patientNotificationsRepository.save(patientNotifications);
 
     surveys.forEach((survey) => {
-      if (survey.patient.notificationsSettings.newSurvey) {
-        const firstName = survey.hospital_patient.firstName
-        const lastName = survey.hospital_patient.lastName
+      const patient:any = this.hospitalPatientRepository.findOneActualHospitalPatient({
+        where: {patientId: survey.patientId}
+      })
+      if (survey.patient.notificationsSettings.newSurvey && patient) {
+        const firstName = patient.firstName
+        const lastName = patient.lastName
         const applicationName = this.configService.get<string>('applicationName');
         const googlePlayLink = this.configService.get<string>('links.googlePlayLink')
         const appStoreLink = this.configService.get<string>('links.appStoreLink')
