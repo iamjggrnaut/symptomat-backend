@@ -22,7 +22,7 @@ export class EmailNotificationsService {
       await this.mailgun.messages().send({
         from: this.MAILGUN_SENDER,
         to: email,
-        subject,
+        subject: subject || 'Активный опрос!',
         html: `
          <!doctype html>
       <html>
