@@ -32,7 +32,7 @@ export class EmailNotificationsService {
         <title>Активный опрос!</title>
       </head>
       <body>
-        Здравствуйте, ${firstName} ${lastName}!
+        Здравствуйте, ${firstName && lastName ? firstName + ' ' + lastName : 'уважаемый пользователь'}!
         <br>
         <br>
         У Вас имеется активный опрос!
