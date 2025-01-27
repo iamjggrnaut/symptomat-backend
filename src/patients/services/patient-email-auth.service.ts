@@ -122,6 +122,8 @@ export class PatientEmailAuthService implements BaseAuthService.PatientAuthServi
 
       const applicationName = this.configService.get<string>('applicationName');
       const template = makePatientSignUpTemplate({
+        firstname, 
+        lastname,
         applicationName,
         supportEmail: this.configService.get<string>('mailgun.supportEmail'),
         password,
@@ -131,7 +133,7 @@ export class PatientEmailAuthService implements BaseAuthService.PatientAuthServi
       await this.emailNotificationService.sendWithTemplate({
         email,
         template,
-        subject: `Благодарим за регистрацию в ${applicationName}`,
+        subject: `Добро пожаловать в ${applicationName}!`,
       });
 
       return this.isDebug ? password : undefined;

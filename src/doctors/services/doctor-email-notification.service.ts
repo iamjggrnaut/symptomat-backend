@@ -50,7 +50,7 @@ export class DoctorEmailNotificationService {
     const hash = uuidv4();
 
     const applicationName = this.configService.get<string>('applicationName');
-    const signInLink = `${this.configService.get<string>('links.frontendSignUpLink')}${hash}`;
+    const signInLink = `https://doctor.resymon.ru/sign-up?hash=${hash}`;
     const template = makeDoctorSignUpTemplate({
       applicationName,
       supportEmail: this.configService.get<string>('mailgun.supportEmail'),
@@ -59,7 +59,7 @@ export class DoctorEmailNotificationService {
     await this.emailNotificationService.sendWithTemplate({
       email,
       template,
-      subject: `Благодарим за регистрацию в ${applicationName}`,
+      subject: `Добро пожаловать в ${applicationName}, коллега!`,
     });
 
     return this.setEmailRecord({ hash, email, hospitalId });
@@ -73,7 +73,7 @@ export class DoctorEmailNotificationService {
   }) {
     const { lang, email, patientMedicalCardNumber, patientId } = input;
 
-    const analyzesLink = `${this.configService.get<string>('links.frontendUrl')}/patient/${patientId}/analyzes`;
+    const analyzesLink = `https://doctor.resymon.ru/patient/${patientId}/analyzes`;
     const supportEmail = this.configService.get<string>('mailgun.supportEmail');
 
     const template = makePatientCreatedAnalyzesTemplate({
@@ -88,14 +88,14 @@ export class DoctorEmailNotificationService {
   }
 
   async sendContactPatientRequestEmail(email: string, medicalCardNumber: string, message: string, patientId: string) {
-    const patientLink = `${this.configService.get<string>('links.frontendUrl')}/patient/${patientId}/1`;
+    const patientLink = `https://doctor.resymon.ru/patient/${patientId}/1`;
     const mailgunDomain = this.configService.get<string>('mailgun.domain');
     const template = makeContactPatientRequestTemplate(medicalCardNumber, message, patientLink, mailgunDomain);
     await this.emailNotificationService.sendWithTemplate({ email, template, subject: 'Связь с пациентом' });
   }
 
   async sendCriticalIndicatorsEmail(email: string, medicalCardNumber: string, questionsWithAnswers, patientId: string) {
-    const patientLink = `${this.configService.get<string>('links.frontendUrl')}/patient/${patientId}/1`;
+    const patientLink = `https://doctor.resymon.ru/patient/${patientId}/1`;
     const mailgunDomain = this.configService.get<string>('mailgun.domain');
     const template = makeCriticalIndicatorsTemplate(
       medicalCardNumber,
@@ -126,7 +126,7 @@ export class DoctorEmailNotificationService {
     const hash = uuidv4();
 
     const applicationName = this.configService.get<string>('applicationName');
-    const recoverPasswordLink = `${this.configService.get<string>('links.frontendResetPasswordLink')}${hash}`;
+    const recoverPasswordLink = `http://localhost:3000/recovery-password?hash=${hash}`;
     const template = makeDoctorRecoverPasswordTemplate({
       applicationName,
       supportEmail: this.configService.get<string>('mailgun.supportEmail'),

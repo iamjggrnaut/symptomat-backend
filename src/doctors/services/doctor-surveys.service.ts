@@ -212,7 +212,7 @@ export class DoctorSurveysService {
     const finalSurveyAnswersIds = hasNextPage ? surveyAnswersIds.slice(0, -1) : surveyAnswersIds;
     const surveyAnswers = this.surveyAnswersRepository.findByIds(finalSurveyAnswersIds, {
       order: {
-        createdAt: 'DESC',
+        createdAt: 'ASC',
       },
     });
 
