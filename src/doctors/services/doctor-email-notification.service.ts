@@ -126,7 +126,7 @@ export class DoctorEmailNotificationService {
     const hash = uuidv4();
 
     const applicationName = this.configService.get<string>('applicationName');
-    const recoverPasswordLink = `http://localhost:3000/recovery-password?hash=${hash}`;
+    const recoverPasswordLink = `https://doctor.resymon.ru/recovery-password?hash=${hash}`;
     const template = makeDoctorRecoverPasswordTemplate({
       applicationName,
       supportEmail: this.configService.get<string>('mailgun.supportEmail'),
