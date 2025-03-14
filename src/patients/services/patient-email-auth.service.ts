@@ -127,8 +127,8 @@ export class PatientEmailAuthService implements BaseAuthService.PatientAuthServi
         applicationName,
         supportEmail: this.configService.get<string>('mailgun.supportEmail'),
         password,
-        appStoreLink: this.configService.get<string>('links.appStoreLink'),
-        googlePlayLink: this.configService.get<string>('links.googlePlayLink'),
+        appStoreLink: 'https://apps.apple.com/us/app/resymon/id1601949347',
+        googlePlayLink: 'https://play.google.com/store/apps/details?id=medico.app',
       });
       await this.emailNotificationService.sendWithTemplate({
         email,
