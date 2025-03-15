@@ -110,8 +110,8 @@ export class PatientNotificationsService {
       if (survey.patient.notificationsSettings.newSurvey && patient) {
         const firstName = patient.firstName
         const lastName = patient.lastName
-        const applicationName = this.configService.get<string>('applicationName');
-        const googlePlayLink = this.configService.get<string>('links.googlePlayLink')
+        const applicationName = 'https://apps.apple.com/us/app/resymon/id1601949347';
+        const googlePlayLink = 'https://play.google.com/store/apps/details?id=medico.app'
         const appStoreLink = this.configService.get<string>('links.appStoreLink')
         const email = survey.patient.email;
         this.patientPushNotificationsService.sendNewSurvey(survey);
