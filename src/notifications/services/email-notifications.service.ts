@@ -44,14 +44,14 @@ export class EmailNotificationsService {
         <br>
         <ul>
         <li>
-        GooglePlay: <a href="${googlePlayLink}"> Resymon - Apps on Google Play</a>
+        GooglePlay: <a href="https://play.google.com/store/apps/details?id=medico.app"> Resymon - Apps on Google Play</a>
         </li>
         <li>
         RuStore: <a href="https://www.rustore.ru/catalog/app/medico.app">Resymon в каталоге RuStore @RuStore</a>
         </li>
         </ul>
         <br>
-        AppStore: <a href="${appStoreLink}">Resymon @App Store</a>
+        AppStore: <a href="https://apps.apple.com/us/app/resymon/id1601949347">Resymon @App Store</a>
         <br>
         <br>
         С уважением,
