@@ -67,6 +67,20 @@ export class DoctorsMutationResolver {
     });
   }
 
+  @Mutation(() => DoctorEmailSignUpSendCodePayload, {
+    description: 'Send code to email for sign-in with email',
+  })
+  async doctorSelfEmailSignUp(
+    @Args({ name: 'input', type: () => DoctorEmailSignUpSendLinkInput })
+    input: DoctorEmailSignUpSendLinkInput,
+  ) {
+    return BasePayload.catchProblems(DoctorEmailSignUpSendCodePayload, async () => {
+      return DoctorEmailSignUpSendCodePayload.create({
+        hash: await this.emailAuthService.doctorSelfSignUpLink(input.email),
+      });
+    });
+  }
+
   @UseGuards(JwtAuthGuard, UserRoleGuard)
   @UserRoles(UsersRole.DOCTOR)
   @Mutation(() => DoctorUpdateLanguagePayload, {

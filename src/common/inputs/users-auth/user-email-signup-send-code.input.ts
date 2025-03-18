@@ -8,4 +8,7 @@ export class UserEmailSignUpSendCodeInput {
   @Transform(({ value }) => value.toLowerCase())
   @Field(() => String)
   email: string;
+
+  @Field(() => String)
+  password: string;
 }

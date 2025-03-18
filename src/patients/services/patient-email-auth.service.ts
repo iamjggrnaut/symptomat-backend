@@ -23,7 +23,7 @@ import {
 import { TooManyRequestsProblem } from '../../common/problems/too-many-requests.problem';
 import { UsersAuthService } from '../../common/services/users-auth.service';
 import { Patient } from '../entities/patient.entity';
-import { PatientCheckRecoveryCodeInput, PatientEmailPasswordRecoveryInput } from '../inputs';
+import { PatientCheckRecoveryCodeInput, PatientEmailPasswordRecoveryInput, PatientSelfCreateInput } from '../inputs';
 import { PatientCreateInput } from '../inputs';
 import { PatientEmailNotificationService } from './patient-email-notification.service';
 
@@ -122,7 +122,7 @@ export class PatientEmailAuthService implements BaseAuthService.PatientAuthServi
 
       const applicationName = this.configService.get<string>('applicationName');
       const template = makePatientSignUpTemplate({
-        firstname, 
+        firstname,
         lastname,
         applicationName,
         supportEmail: this.configService.get<string>('mailgun.supportEmail'),
@@ -134,6 +134,49 @@ export class PatientEmailAuthService implements BaseAuthService.PatientAuthServi
         email,
         template,
         subject: `Добро пожаловать в ${applicationName}!`,
+      });
+
+      return this.isDebug ? password : undefined;
+    } catch (error) {
+      if (error?.status === HttpStatus.TOO_MANY_REQUESTS) {
+        throw new TooManyRequestsProblem(error.message);
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  async patientSelfSignUp(doctorId: string, input: PatientSelfCreateInput): Promise<string> {
+    try {
+      const { email, password, medicalCardNumber, firstname, lastname } = input;
+      const foundPatient = await this.patientsRepository.findOneActualPatient({
+        where: {
+          email: email,
+        },
+      });
+      if (foundPatient) {
+        throw new BadRequestException(`User with email ${email} is already registered`);
+      }
+
+      const patient = await this.createPatientOrFail({ password, email });
+
+      const { hospitalId } = await this.hospitalsDoctorsRepository.findOneOrFail({
+        where: {
+          doctorId: doctorId,
+        },
+      });
+
+      await this.hospitalsPatientsRepository.upsert({
+        patientId: patient.id,
+        hospitalId,
+        medicalCardNumber,
+        firstName: firstname,
+        lastName: lastname,
+      });
+
+      await this.doctorsPatientsRepository.upsert({
+        patientId: patient.id,
+        doctorId: doctorId,
       });
 
       return this.isDebug ? password : undefined;

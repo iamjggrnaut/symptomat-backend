@@ -75,6 +75,20 @@ export class DoctorEmailAuthService implements BaseAuthService.DoctorAuthService
     return this.isDebug ? hash : undefined;
   }
 
+  async doctorSelfSignUpLink(email: string): Promise<string | undefined> {
+    const doctor = await this.doctorRepository.findOne({
+      where: { email },
+    });
+    if (doctor) {
+      throw new BadRequestException(`Doctor with email ${doctor.email} already exists!`);
+    }
+    const hospitalId = '52eab7b8-148c-432e-a2f9-c8c65aeeb3e5';
+
+    await this.doctorInvitationsRepository.upsert({ email, hospitalId });
+
+    return this.isDebug ? hospitalId : undefined;
+  }
+
   async sendPasswordRecoveryLink(email: string): Promise<string | undefined> {
     const doctor = await this.repository.findOne({
       email,

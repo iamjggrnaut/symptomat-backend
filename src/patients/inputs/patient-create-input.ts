@@ -26,3 +26,29 @@ export class PatientCreateInput {
   @Field(() => String)
   medicalCardNumber: string;
 }
+
+@InputType()
+export class PatientSelfCreateInput {
+  @IsEmail()
+  //@IsUniqueHospitalPatientEmail()
+  @Transform(({ value }) => value.toLowerCase())
+  @Field(() => String)
+  email: string;
+
+  @Field(() => String)
+  password: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  firstname: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, { nullable: true })
+  lastname: string;
+
+  @Length(1, 50)
+  @Field(() => String)
+  medicalCardNumber: string;
+}

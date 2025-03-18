@@ -38,6 +38,7 @@ import {
   PatientEmailUpdateSendCodeInput,
   PatientFcmTokenUpdateInput,
   PatientPasswordUpdateInput,
+  PatientSelfCreateInput,
   PatientUpdateLanguageInput,
   PatientUpdateNotificationsInput,
 } from '../inputs';
@@ -61,16 +62,30 @@ export class PatientsMutationResolver {
   @UseGuards(JwtAuthGuard, UserRoleGuard, PatientSignUpGuard, PatientHospitalLimitGuard)
   @UserRoles(UsersRole.DOCTOR)
   @Mutation(() => PatientCreatePayload, {
-    description: 'Create patient and send temp password to email',
+    description: 'Create patient',
   })
   async patientCreate(
     @Args({ name: 'input', type: () => PatientCreateInput })
-    input: PatientCreateInput,
+    input: PatientSelfCreateInput,
     @IAM('id') doctorId: string,
   ) {
     return BasePayload.catchProblems(PatientCreatePayload, async () => {
       return PatientCreatePayload.create({
-        password: await this.emailAuthService.sendPasswordForSignUp(doctorId, input),
+        password: await this.emailAuthService.patientSelfSignUp(doctorId, input),
+      });
+    });
+  }
+
+  @Mutation(() => PatientCreatePayload, {
+    description: 'Create account for patient self',
+  })
+  async patientSelfCreate(
+    @Args({ name: 'input', type: () => PatientSelfCreateInput })
+    input: PatientSelfCreateInput,
+  ) {
+    return BasePayload.catchProblems(PatientCreatePayload, async () => {
+      return PatientCreatePayload.create({
+        password: await this.emailAuthService.patientSelfSignUp('6a140f33-8cea-49fe-bd28-b4e3e7dfa1a5', input),
       });
     });
   }
