@@ -16,8 +16,16 @@ export class EmailNotificationsService {
       text,
     });
   }
-  
-  async notifyPatientNewQuery(email: string, firstName: string, lastName: string, googlePlayLink: string, appStoreLink: string, applicationName: string, subject?: string) {
+
+  async notifyPatientNewQuery(
+    email: string,
+    firstName: string,
+    lastName: string,
+    googlePlayLink: string,
+    appStoreLink: string,
+    applicationName: string,
+    subject?: string,
+  ) {
     try {
       await this.mailgun.messages().send({
         from: this.MAILGUN_SENDER,

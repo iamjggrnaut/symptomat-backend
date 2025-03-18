@@ -7,8 +7,8 @@ export const makePatientSignUpTemplate = ({
   password,
   supportEmail,
 }: {
-  firstname: string,
-  lastname: string,
+  firstname: string;
+  lastname: string;
   applicationName: string;
   appStoreLink: string;
   googlePlayLink: string;

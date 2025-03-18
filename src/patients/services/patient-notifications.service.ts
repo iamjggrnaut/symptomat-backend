@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
 import { ConfigService } from '@nestjs/config';
+import { OnEvent } from '@nestjs/event-emitter';
 import { DoctorCreatedSurveysEvent } from 'src/common/events';
 import { DOCTOR_CREATED_SURVEYS_EVENT } from 'src/common/events/events.types';
+import { HospitalsPatientsRepository } from 'src/hospitals/repositories/';
 import { EmailNotificationsService } from 'src/notifications/services';
 import { SurveysRepository } from 'src/surveys/repositories';
-import { HospitalsPatientsRepository } from 'src/hospitals/repositories/';
 import { cursorToData, dataToCursor } from 'src/utils/base64';
 import { In } from 'typeorm';
 
@@ -104,24 +104,24 @@ export class PatientNotificationsService {
     this.patientNotificationsRepository.save(patientNotifications);
 
     surveys.forEach((survey) => {
-      const patient:any = this.hospitalPatientRepository.findOneActualHospitalPatient({
-        where: {patientId: survey.patientId}
-      })
+      const patient: any = this.hospitalPatientRepository.findOneActualHospitalPatient({
+        where: { patientId: survey.patientId },
+      });
       if (survey.patient.notificationsSettings.newSurvey && patient) {
-        const firstName = patient.firstName
-        const lastName = patient.lastName
+        const firstName = patient.firstName;
+        const lastName = patient.lastName;
         const applicationName = 'Resymon';
-        const googlePlayLink = 'https://play.google.com/store/apps/details?id=medico.app'
-        const appStoreLink = 'https://apps.apple.com/us/app/resymon/id1601949347'
+        const googlePlayLink = 'https://play.google.com/store/apps/details?id=medico.app';
+        const appStoreLink = 'https://apps.apple.com/us/app/resymon/id1601949347';
         const email = survey.patient.email;
         this.patientPushNotificationsService.sendNewSurvey(survey);
         this.emailNotificationService.notifyPatientNewQuery(
           email,
           firstName,
-          lastName, 
+          lastName,
           googlePlayLink,
           appStoreLink,
-          applicationName
+          applicationName,
         );
       }
     });

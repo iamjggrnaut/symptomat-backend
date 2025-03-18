@@ -1,18 +1,18 @@
 export const makePatientAnswerQueryTemplate = ({
-    firstname,
-    lastname,
-    applicationName,
-    appStoreLink,
-    googlePlayLink,
-    supportEmail,
-  }: {
-    firstname: string,
-    lastname: string,
-    applicationName: string;
-    appStoreLink: string;
-    googlePlayLink: string;
-    supportEmail: string;
-  }) => `
+  firstname,
+  lastname,
+  applicationName,
+  appStoreLink,
+  googlePlayLink,
+  supportEmail,
+}: {
+  firstname: string;
+  lastname: string;
+  applicationName: string;
+  appStoreLink: string;
+  googlePlayLink: string;
+  supportEmail: string;
+}) => `
         <!doctype html>
       <html>
       <head>
@@ -49,4 +49,3 @@ export const makePatientAnswerQueryTemplate = ({
       </body>
       </html>
         `;
-  
