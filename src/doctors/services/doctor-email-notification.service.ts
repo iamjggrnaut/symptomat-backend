@@ -65,6 +65,12 @@ export class DoctorEmailNotificationService {
     return this.setEmailRecord({ hash, email, hospitalId });
   }
 
+  async setEmailWithoutLink(hospitalId: string, email: string): Promise<SignUpEmailRecord> {
+    const hash = uuidv4();
+
+    return this.setEmailRecord({ hash, email, hospitalId });
+  }
+
   async sendUploadAnalyzesByPatientEmail(input: {
     lang: Language;
     email: string;
@@ -112,6 +118,7 @@ export class DoctorEmailNotificationService {
 
   private setEmailRecord({ hash, email, hospitalId }: SignUpEmailRecordPayload): SignUpEmailRecord {
     const dayInSec = 60 * 60 * 24;
+
     const { expDate } = this.cacheStorageService.setValueWithExp(hash, { hash, email, hospitalId }, dayInSec);
 
     return {

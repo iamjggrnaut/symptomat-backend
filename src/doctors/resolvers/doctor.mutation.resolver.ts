@@ -76,7 +76,7 @@ export class DoctorsMutationResolver {
   ) {
     return BasePayload.catchProblems(DoctorEmailSignUpSendCodePayload, async () => {
       return DoctorEmailSignUpSendCodePayload.create({
-        hash: await this.emailAuthService.doctorSelfSignUpLink(input.email),
+        hash: await this.emailAuthService.doctorSelfSignUpLink('495e269d-4a59-472f-a1fe-2acf8ccfafeb', input.email),
       });
     });
   }

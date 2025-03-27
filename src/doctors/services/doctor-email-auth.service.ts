@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BaseProblem } from 'src/common/payloads';
 import { HospitalManagersRepository } from 'src/hospital-managers/repository/hospital-managers.repository';
 import { HospitalsDoctorsRepository, HospitalsRepository } from 'src/hospitals/repositories';
+import { EntityManager } from 'typeorm';
 
 import { BaseAuthService } from '../../auth/auth.types';
 import {
@@ -37,11 +38,54 @@ export class DoctorEmailAuthService implements BaseAuthService.DoctorAuthService
     private readonly hospitalsRepository: HospitalsRepository,
     private readonly hospitalManagersRepository: HospitalManagersRepository,
     readonly configService: ConfigService,
+    private readonly entityManager: EntityManager,
     @InjectRepository(DoctorRepository)
     private readonly repository: DoctorRepository,
   ) {
     const env = configService.get<string>('environment');
     this.isDebug = ['development', 'staging'].includes(env);
+  }
+
+  async selfSignUp(email: string, password: string): Promise<{ user: any; token: string; refreshToken: string }> {
+    const hospitalId = '495e269d-4a59-472f-a1fe-2acf8ccfafeb';
+
+    // Проверяем, существует ли врач с таким email
+    const doctorExists = await this.entityManager.query(`SELECT id FROM doctors WHERE email = $1 LIMIT 1;`, [email]);
+    if (doctorExists.length > 0) {
+      throw new BaseProblem('Doctor already exists');
+    }
+
+    // Проверяем, существует ли больница с указанным hospitalId
+    const hospitalExists = await this.entityManager.query(`SELECT id FROM hospitals WHERE id = $1 LIMIT 1;`, [
+      hospitalId,
+    ]);
+    if (hospitalExists.length === 0) {
+      throw new BaseProblem('Hospital does not exist');
+    }
+
+    // Вставляем данные в таблицу doctors
+    const insertDoctorQuery = `
+      INSERT INTO doctors (email, password)
+      VALUES ($1, $2)
+      RETURNING id, email;
+    `;
+    const [doctor] = await this.entityManager.query(insertDoctorQuery, [email, password]);
+
+    // Вставляем данные в таблицу hospitals_doctors
+    const insertHospitalDoctorQuery = `
+      INSERT INTO hospitals_doctors (hospital_id, doctor_id)
+      VALUES ($1, $2);
+    `;
+    await this.entityManager.query(insertHospitalDoctorQuery, [hospitalId, doctor.id]);
+
+    // Генерируем токены
+    const { token, refreshToken } = await this.userAuthService.createAuthTokensOrFail(doctor);
+
+    return {
+      user: doctor,
+      token,
+      refreshToken,
+    };
   }
 
   async signIn({ email, password }: BaseAuthService.UserEmailSigninInput): Promise<BaseAuthService.AuthDoctor> {
@@ -75,18 +119,20 @@ export class DoctorEmailAuthService implements BaseAuthService.DoctorAuthService
     return this.isDebug ? hash : undefined;
   }
 
-  async doctorSelfSignUpLink(email: string): Promise<string | undefined> {
+  async doctorSelfSignUpLink(hospitalManagerId: string, email: string): Promise<string | undefined> {
     const doctor = await this.doctorRepository.findOne({
       where: { email },
     });
     if (doctor) {
       throw new BadRequestException(`Doctor with email ${doctor.email} already exists!`);
     }
-    const hospitalId = '52eab7b8-148c-432e-a2f9-c8c65aeeb3e5';
+    const hospitalId = '495e269d-4a59-472f-a1fe-2acf8ccfafeb';
+
+    const { hash } = await this.doctorNotificationService.setEmailWithoutLink(hospitalId, email);
 
     await this.doctorInvitationsRepository.upsert({ email, hospitalId });
 
-    return this.isDebug ? hospitalId : undefined;
+    return this.isDebug ? hash : undefined;
   }
 
   async sendPasswordRecoveryLink(email: string): Promise<string | undefined> {
