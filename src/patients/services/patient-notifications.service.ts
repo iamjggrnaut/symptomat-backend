@@ -12,8 +12,10 @@ import { In } from 'typeorm';
 import { PatientNotification } from '../entities/patient-notification.entity';
 import { PatientNotificationModel } from '../models/patient-notification.model';
 import { PatientNotificationKind } from '../patients.types';
-import { PatientNotificationsRepository } from '../repositories';
+import { PatientNotificationsRepository, PatientsRepository } from '../repositories';
 import { PatientPushNotificationsService } from './patient-push-notifications.service';
+import { NotificationHttpClient } from 'src/telegram/notification.http.client';
+import { DoctorRepository } from 'src/doctors/repositories';
 
 export interface PatientNotificationCursor {
   lastNotification: Pick<PatientNotification, 'createdAt' | 'id'>;
@@ -26,8 +28,11 @@ export class PatientNotificationsService {
     private readonly patientNotificationsRepository: PatientNotificationsRepository,
     readonly configService: ConfigService,
     readonly hospitalPatientRepository: HospitalsPatientsRepository,
-    private readonly emailNotificationService: EmailNotificationsService,
-    private readonly patientPushNotificationsService: PatientPushNotificationsService,
+    readonly patientRepository: PatientsRepository,
+    readonly doctorRepository: DoctorRepository,
+    // private readonly emailNotificationService: EmailNotificationsService,
+    // private readonly patientPushNotificationsService: PatientPushNotificationsService,
+    private readonly notificationClient: NotificationHttpClient,
   ) {}
   async getNotifications({ patientId, first = 4, after }: { patientId: string; first?: number; after?: string }) {
     if (first < 0) {
@@ -102,27 +107,40 @@ export class PatientNotificationsService {
       };
     });
     this.patientNotificationsRepository.save(patientNotifications);
-
+    
+    
     surveys.forEach((survey) => {
       const patient: any = this.hospitalPatientRepository.findOneActualHospitalPatient({
         where: { patientId: survey.patientId },
       });
+      const patientFromRepo:any = this.patientRepository.findOne({where: {id: survey.patientId}})
+      const doctor: any = this.doctorRepository.findOne({where: {id: survey.doctorId}})
       if (survey.patient.notificationsSettings.newSurvey && patient) {
-        const firstName = patient.firstName;
-        const lastName = patient.lastName;
-        const applicationName = 'Resymon';
-        const googlePlayLink = 'https://play.google.com/store/apps/details?id=medico.app';
-        const appStoreLink = 'https://apps.apple.com/us/app/resymon/id1601949347';
-        const email = survey.patient.email;
-        this.patientPushNotificationsService.sendNewSurvey(survey);
-        this.emailNotificationService.notifyPatientNewQuery(
-          email,
-          firstName,
-          lastName,
-          googlePlayLink,
-          appStoreLink,
-          applicationName,
-        );
+
+        this.notificationClient
+        .send({
+          type: 'newsurvey',
+          payload: {
+            patientId: patient.patientId,
+            email: patientFromRepo.email,
+            medicalCardNumber: patient.medicalCardNumber,
+            firstName: patient.firstName,
+            lastName: patient.lastName,
+          },
+          tgChatId: doctor.tgChatId,
+        })
+        .catch((e) => {});
+
+        
+        // this.patientPushNotificationsService.sendNewSurvey(survey);
+        // this.emailNotificationService.notifyPatientNewQuery(
+        //   email,
+        //   firstName,
+        //   lastName,
+        //   googlePlayLink,
+        //   appStoreLink,
+        //   applicationName,
+        // );
       }
     });
   }
