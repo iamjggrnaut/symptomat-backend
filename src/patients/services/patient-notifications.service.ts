@@ -4,7 +4,6 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { DoctorCreatedSurveysEvent } from 'src/common/events';
 import { DOCTOR_CREATED_SURVEYS_EVENT } from 'src/common/events/events.types';
 import { HospitalsPatientsRepository } from 'src/hospitals/repositories/';
-import { EmailNotificationsService } from 'src/notifications/services';
 import { SurveysRepository } from 'src/surveys/repositories';
 import { cursorToData, dataToCursor } from 'src/utils/base64';
 import { In } from 'typeorm';
@@ -13,7 +12,6 @@ import { PatientNotification } from '../entities/patient-notification.entity';
 import { PatientNotificationModel } from '../models/patient-notification.model';
 import { PatientNotificationKind } from '../patients.types';
 import { PatientNotificationsRepository, PatientsRepository } from '../repositories';
-import { PatientPushNotificationsService } from './patient-push-notifications.service';
 import { NotificationHttpClient } from 'src/telegram/notification.http.client';
 import { DoctorRepository } from 'src/doctors/repositories';
 

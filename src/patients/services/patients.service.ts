@@ -1,9 +1,6 @@
 import crypto from 'crypto';
 
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PatientDoctorContactRequestEvent } from 'src/common/events';
-import { PATIENT_DOCTOR_CONTACT_REQUEST_EVENT } from 'src/common/events/events.types';
 import { NotExistPatientProblem } from 'src/common/problems';
 import { DoctorRepository, DoctorsPatientsRepository } from 'src/doctors/repositories';
 import { HospitalPatientModel } from 'src/hospitals/models';
