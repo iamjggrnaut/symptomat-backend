@@ -74,6 +74,9 @@ export class Patient extends Base {
 
   @Column('enum', { enum: Language, default: Language.RU })
   language: Language;
+  
+  @Column({ nullable: true })
+  tgChatId?: number;
 
   @Column({ type: 'timestamptz', nullable: true })
   inviteEndAt: Date;

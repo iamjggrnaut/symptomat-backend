@@ -138,35 +138,40 @@ export class SurveyTemplatesCronEvery5MinuteService {
     return surveyTemplates.map((surveyTemplate) => surveyTemplate.id);
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  // @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  @Cron(CronExpression.EVERY_10_MINUTES, {
     name: 'EVERY_DAY_SURVEY_TEMPLATES_CRON',
   })
   async handleEveryDaySurveyTemplates() {
     this.handleSurveyTemplates(SurveyTemplatePeriod.EVERYDAY, await this.getSurveyTemplatesIds());
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  // @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  @Cron(CronExpression.EVERY_10_MINUTES, {
     name: 'EVERY_TWO_DAYS_SURVEY_TEMPLATES_CRON',
   })
   async handleEveryTwoDaysSurveyTemplates() {
     this.handleSurveyTemplates(SurveyTemplatePeriod.EVERY_TWO_DAYS, await this.getSurveyTemplatesIds());
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  // @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  @Cron(CronExpression.EVERY_10_MINUTES, {
     name: 'ONCE_A_WEEK_SURVEY_TEMPLATES_CRON',
   })
   async handleOnceAWeekSurveyTemplates() {
     this.handleSurveyTemplates(SurveyTemplatePeriod.ONCE_A_WEEK, await this.getSurveyTemplatesIds());
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  // @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  @Cron(CronExpression.EVERY_10_MINUTES, {
     name: 'ONCE_IN_TWO_WEEKS_SURVEY_TEMPLATES_CRON',
   })
   async handleOnceInTwoWeeksSurveyTemplates() {
     this.handleSurveyTemplates(SurveyTemplatePeriod.ONCE_IN_TWO_WEEKS, await this.getSurveyTemplatesIds());
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  // @Cron(CronExpression.EVERY_DAY_AT_9AM, {
+  @Cron(CronExpression.EVERY_10_MINUTES, {
     name: 'CANCEL_PAST_SURVEY_TEMPLATES_CRON',
   })
   async cancelPastSurveyTemplates() {

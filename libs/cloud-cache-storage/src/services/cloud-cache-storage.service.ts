@@ -17,7 +17,12 @@ export class CloudCacheStorageService {
 
     console.log('Saving to Redis:', { key, value, expDate: expDateISO });
 
-    const result = this.redisService.client.set(key, JSON.stringify({ ...value, expDate: expDateISO }), 'EX', expireInSec);
+    const result = this.redisService.client.set(
+      key,
+      JSON.stringify({ ...value, expDate: expDateISO }),
+      'EX',
+      expireInSec,
+    );
 
     console.log('Redis set result:', result);
 

@@ -10,14 +10,20 @@ import { SurveysRepository } from 'src/surveys/repositories';
 import { SurveyStatus } from 'src/surveys/surveys.types';
 
 import { DoctorCreateSurveyTemplateInput } from '../inputs';
+import { PatientsRepository } from 'src/patients/repositories';
+import { NotificationHttpClient } from 'src/telegram/notification.http.client';
+import { HospitalsPatientsRepository } from 'src/hospitals/repositories';
 
 @Injectable()
 export class DoctorSurveyTemplatesService {
   constructor(
     private readonly surveysRepository: SurveysRepository,
+    private readonly patientRepository: PatientsRepository,
+    private readonly hospitalPatientRepository: HospitalsPatientsRepository,
     private readonly surveyTemplatesRepository: SurveyTemplatesRepository,
     private readonly surveyTemplatesDrugsRepository: SurveyTemplatesDrugsRepository,
     private readonly surveyTemplatesQuestionsRepository: SurveyTemplatesQuestionsRepository,
+    private readonly notificationClient: NotificationHttpClient
   ) {}
 
   async findOne(surveyTemplateId: string) {
@@ -81,8 +87,25 @@ export class DoctorSurveyTemplatesService {
       { status: SurveyStatus.CANCELED },
     );
 
+    // updates
+    const patientId = input.patientId
+    const patient = await this.patientRepository.findOne({where: {id: patientId}})
+    const hospitalPatient = await this.hospitalPatientRepository.findOne({where: {patientId}})
+
     const surveyTemplate = await this.create(doctorId, input, SurveyTemplateKind.PRIVATE);
     await this.surveyTemplatesRepository.update(surveyTemplate.id, { status: SurveyTemplateStatus.ACTIVE });
+    
+    this.notificationClient.send({
+      type: 'newsurvey',
+      payload: {
+        patientId: patientId,
+        email: patient.email,
+        medicalCardNumber: hospitalPatient.medicalCardNumber,
+        firstName: hospitalPatient.firstName,
+        lastName: hospitalPatient.lastName
+      },
+      tgChatId: patient.tgChatId,
+    }).catch(e => {});
 
     return this.surveyTemplatesRepository.findOne(surveyTemplate.id);
   }

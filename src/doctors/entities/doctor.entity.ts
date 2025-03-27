@@ -25,6 +25,10 @@ export class Doctor extends Base {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  
+  @Column({ nullable: true })
+  tgChatId?: number;
+
   @OneToMany(() => HospitalsDoctors, (hd) => hd.doctor, { cascade: true })
   hospitalsDoctors: HospitalsDoctors[];
 

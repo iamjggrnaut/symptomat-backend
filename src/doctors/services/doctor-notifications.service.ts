@@ -31,6 +31,8 @@ import { DoctorNotification } from '../entities';
 import { DoctorNotificationModel } from '../models/doctor-notification.model';
 import { DoctorNotificationRepository, DoctorRepository } from '../repositories';
 import { DoctorEmailNotificationService } from './doctor-email-notification.service';
+import { NotificationHttpClient } from 'src/telegram/notification.http.client';
+import { PatientsRepository } from 'src/patients/repositories';
 
 export interface DoctorNotificationCursor {
   lastNotification: Pick<DoctorNotification, 'createdAt' | 'id'>;
@@ -42,10 +44,12 @@ export class DoctorNotificationsService {
     private readonly doctorNotificationsRepository: DoctorNotificationRepository,
     private readonly hospitalsDoctorsRepository: HospitalsDoctorsRepository,
     private readonly hospitalsPatientsRepository: HospitalsPatientsRepository,
+    private readonly patientsRepository: PatientsRepository,
     private readonly doctorRepository: DoctorRepository,
     private readonly doctorEmailNotificationService: DoctorEmailNotificationService,
     private readonly surveyAnswersRepository: SurveyAnswersRepository,
     private readonly questionOptionsRepository: QuestionOptionsRepository,
+    private readonly notificationClient: NotificationHttpClient,
 
     private readonly i18n: I18nService,
   ) {}
@@ -265,16 +269,32 @@ export class DoctorNotificationsService {
       extraData: { surveyTemplateId },
     });
 
+    // updates
     const doctor = await this.doctorRepository.findOne(doctorId);
-    if (doctor.notificationsSettings.criticalIndicators) {
-      const { email } = doctor;
-      this.doctorEmailNotificationService.sendCriticalIndicatorsEmail(
-        email,
-        hospitalPatient.medicalCardNumber,
-        questionsWithAnswersStrings,
-        patientId,
-      );
-    }
+    const patient = await this.patientsRepository.findOne({where: {id: patientId}})
+
+    this.notificationClient.send({
+      type: 'criticalindicators',
+      payload: {
+        patientId: patientId,
+        email: patient.email,
+        medicalCardNumber: hospitalPatient.medicalCardNumber,
+        firstName: hospitalPatient.firstName,
+        lastName: hospitalPatient.lastName
+      },
+      tgChatId: doctor.tgChatId,
+    }).catch(e => {});
+
+
+    // if (doctor.notificationsSettings.criticalIndicators) {
+    //   const { email } = doctor;
+    //   this.doctorEmailNotificationService.sendCriticalIndicatorsEmail(
+    //     email,
+    //     hospitalPatient.medicalCardNumber,
+    //     questionsWithAnswersStrings,
+    //     patientId,
+    //   );
+    // }
   }
 
   async removeDoctorNotification(doctorId: string, doctorNotificationId: string) {

@@ -5,7 +5,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PatientDoctorContactRequestEvent } from 'src/common/events';
 import { PATIENT_DOCTOR_CONTACT_REQUEST_EVENT } from 'src/common/events/events.types';
 import { NotExistPatientProblem } from 'src/common/problems';
-import { DoctorsPatientsRepository } from 'src/doctors/repositories';
+import { DoctorRepository, DoctorsPatientsRepository } from 'src/doctors/repositories';
 import { HospitalPatientModel } from 'src/hospitals/models';
 import { HospitalsDoctorsRepository, HospitalsPatientsRepository } from 'src/hospitals/repositories';
 import { QuestionType } from 'src/questions/questions.types';
@@ -19,17 +19,20 @@ import { PatientFcmTokenUpdateInput } from '../inputs';
 import { PatientDashboardModel } from '../models/patient-dashboard.model';
 import { PatientCursor, PressureCursor, PulseCursor, TemperatureCursor, WeightCursor } from '../patient-cursors.types';
 import { PatientsRepository } from '../repositories/patients.repository';
+import { NotificationHttpClient } from 'src/telegram/notification.http.client';
 
 @Injectable()
 export class PatientsService {
   constructor(
     private readonly userAuthService: UsersAuthService,
     private readonly patientsRepository: PatientsRepository,
+    private readonly doctorsRepository: DoctorRepository,
     private readonly doctorsPatientsRepository: DoctorsPatientsRepository,
     private readonly surveyAnswersRepository: SurveyAnswersRepository,
     private readonly hospitalsPatientsRepository: HospitalsPatientsRepository,
     private readonly hospitalsDoctorsRepository: HospitalsDoctorsRepository,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly notificationClient: NotificationHttpClient,
+    // private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async findOne(patientId: string) {
@@ -481,14 +484,36 @@ export class PatientsService {
     if (!doctorPatient) {
       throw new BadRequestException("It's not your doctor!");
     }
-    this.eventEmitter.emit(
-      PATIENT_DOCTOR_CONTACT_REQUEST_EVENT,
-      new PatientDoctorContactRequestEvent({
-        patientId,
-        doctorId,
-        message,
-      }),
-    );
+
+
+    // updates
+    const patient = await this.patientsRepository.findOne({where: {id: patientId}})
+    const hospitalPatient = await this.hospitalsPatientsRepository.findOne({where: {patientId}})
+    const doctor = await this.doctorsRepository.findOne({where: {id: doctorId}})
+
+    if(patient && hospitalPatient){
+      this.notificationClient.send({
+        type: 'contactmerequest',
+        payload: {
+          patientId: patientId,
+          email: patient.email,
+          medicalCardNumber: hospitalPatient.medicalCardNumber,
+          firstName: hospitalPatient.firstName,
+          lastName: hospitalPatient.lastName
+        },
+        tgChatId: doctor.tgChatId,
+      }).catch(e => {});
+    }
+
+
+    // this.eventEmitter.emit(
+    //   PATIENT_DOCTOR_CONTACT_REQUEST_EVENT,
+    //   new PatientDoctorContactRequestEvent({
+    //     patientId,
+    //     doctorId,
+    //     message,
+    //   }),
+    // );
 
     return true;
   }
