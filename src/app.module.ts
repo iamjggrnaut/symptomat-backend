@@ -43,6 +43,7 @@ import {
 import { SurveyTemplateModule } from './survey-templates/survey-templates.module';
 import { SurveyAnswersRepository, SurveysRepository } from './surveys/repositories';
 import { SurveysModule } from './surveys/surveys.module';
+import { TelegramModule } from './telegram/telegram.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { SurveysModule } from './surveys/surveys.module';
     }),
     ScheduleModule.forRoot(),
     AuthModule,
+    TelegramModule,
     PatientAnalyzesModule,
     PatientsModule,
     TerminusModule,

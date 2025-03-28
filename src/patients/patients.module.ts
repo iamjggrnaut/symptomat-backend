@@ -33,6 +33,7 @@ import { FirebaseConfigService } from './services/firebase-config.service';
 import { PatientEmailNotificationService } from './services/patient-email-notification.service';
 import { PatientNotificationsService } from './services/patient-notifications.service';
 import { PatientPushNotificationsService } from './services/patient-push-notifications.service';
+import { TelegramModule } from 'src/telegram/telegram.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { PatientPushNotificationsService } from './services/patient-push-notific
       SurveyTemplatesQuestionsRepository,
       QuestionsRepository,
     ]),
+    TelegramModule,
     HospitalsModule,
     NotificationsModule,
     AppleAuthMobileModule,

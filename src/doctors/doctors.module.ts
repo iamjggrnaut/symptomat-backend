@@ -44,10 +44,12 @@ import { DoctorEmailAuthService } from './services/doctor-email-auth.service';
 import { DoctorEmailNotificationService } from './services/doctor-email-notification.service';
 import { DoctorNotificationsService } from './services/doctor-notifications.service';
 import { DoctorService } from './services/doctor.service';
+import { TelegramModule } from 'src/telegram/telegram.module';
 
 @Module({
   imports: [
     NotificationsModule,
+    TelegramModule,
     TypeOrmModule.forFeature([
       HospitalManagersRepository,
       HospitalsDoctorsRepository,
